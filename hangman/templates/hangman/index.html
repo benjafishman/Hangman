@@ -1,0 +1,118 @@
+{% extends 'hangman/base.html' %}
+
+{% load staticfiles %}
+
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+{% block header %}
+    <link href="{% static 'index1.css' %}" rel="stylesheet">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+{% endblock header %}
+
+{% block content %}
+    <h1>Hangman</h1>
+    <div class="wrapper">
+
+        <div id="hangman-view-wrapper" class="tile">
+
+            <div class="hangman-image">
+
+                {% if pic_num %}
+                    {% with "images/Hangman-"|add:pic_num|add:".png" as picture %}
+                        <img src="{% static picture %}" alt="hangman"/>'
+                    {% endwith %}
+                {% else %}
+                    <img src="{% static 'images/Hangman-0.png' %}" alt="hangman"/>
+                {% endif %}
+            </div>
+
+
+            <div>
+                {# Display a form #}
+                <div id="guess-form-wrapper">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group">
+
+                                <form class="guess-form" action="#" method="post">
+                                    {% csrf_token %}
+                                    {{ form }}
+                                    <input class="btn btn-default" id="submit-button" type="submit" value="Submit"/>
+                                    <input class="btn btn-default" type="submit" name="restart-game" value="Restart"/>
+                                    {% if form.errors %}
+                                        {% for field in form %}
+                                            {% for error in field.errors %}
+                                                <div class="alert alert-error">
+                                                    <strong>{{ error|escape }}</strong>
+                                                </div>
+                                            {% endfor %}
+                                        {% endfor %}
+                                        {% for error in form.non_field_errors %}
+                                            <div class="alert alert-error">
+                                                <strong>{{ error|escape }}</strong>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="junkyard-wrapper" class="tile">
+            <div class="inner-junk">
+            <h4>Junk Yard</h4>
+            {% if junk %}
+                <p>{{ junk }}</p>
+            {% endif %}
+            </div>
+        </div>
+
+        <div id="results-wrapper" class="tile">
+            <div class="inner">
+                <span class="answer">{% if results %}
+                    {% for letter in results %}
+                        {{ letter }}
+                    {% endfor %}
+
+                {% endif %}
+                </span>
+            </div>
+        </div>
+
+        <div class="countdown tile">
+            <div class="circle-pad">
+            <p>{{ guesses }}</p>
+                </div>
+        </div>
+
+    </div>
+{% endblock content %}
+
+{% block script %}
+    <script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    {% if game_over %}
+        <script>
+        $('#{{ form.letter.auto_id }}').prop("disabled", true);
+        $('#submit-button').prop("disabled", true);
+
+        </script>
+
+    {% endif %}
+{% endblock script %}

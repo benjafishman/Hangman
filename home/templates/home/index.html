@@ -1,0 +1,16 @@
+{% extends 'home/base.html' %}
+
+{% load staticfiles %}
+
+{% block header %}
+    <link href="{% static 'index.css' %}" rel="stylesheet">
+{% endblock header %}
+
+{% block content %}
+    <h1>Welcome to Ben</h1>
+    <div id="hangman-start-button">
+    <form action="{% url 'hangman:index' %}" class="inline">
+        <button class="float-left submit-button" >Hangman</button>
+    </form>
+    </div>
+{% endblock content %}
