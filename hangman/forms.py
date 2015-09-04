@@ -17,11 +17,11 @@ class GuessLetterForm(forms.Form):
 
     def clean_letter(self):
         letter = self.cleaned_data['letter']
-        pattern = re.compile("^([a-zA-Z]{1})$")
+        pattern = re.compile("^([a-zA-Z]+)$")
         if pattern.search(letter):
             return letter.lower()
         else:
-            raise forms.ValidationError('input must be one letter')
+            raise forms.ValidationError('input must be valid word or letter')
 
 
 

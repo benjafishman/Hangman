@@ -3,7 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 # Create your models here.
 
-# TODO: rename vars to be mor intuitive
+# TODO: rename vars to be more intuitive
 
 class Hangman(models.Model):
     word = models.CharField(max_length=200)
@@ -12,8 +12,9 @@ class Hangman(models.Model):
     current_guess_num = models.IntegerField(default=0)
     session_id = models.CharField(max_length=200, default='0000000')
     attempts = models.CharField(max_length=200, default='')
+    word_attempt = models.CharField(max_length=200, default='')
 
-    def check_guess(self, letter):
+    def check_letter_guess(self, letter):
         if letter in self.word:
             return True
         return False
@@ -21,8 +22,25 @@ class Hangman(models.Model):
     def increment_guesses(self):
         self.current_guess_num += 1
 
+    def get_word(self):
+
+        return self.word
+
+    def check_word_guess(self, guess):
+        if guess == self.word:
+            self.current_guess = guess
+            return True
+        else:
+
+            return False
+    def update_word_attempts(self, word):
+        self.word_attempt += word+' '
+
+    def get_word_attempt(self):
+        return self.word_attempt
+
     def update_attempts(self, letter):
-        self.attempts += letter+','
+        self.attempts += letter
 
     def get_attempts(self):
         return self.attempts

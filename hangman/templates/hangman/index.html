@@ -23,6 +23,7 @@
     <h1>Hangman</h1>
     <div class="wrapper">
 
+
         <div id="hangman-view-wrapper" class="tile">
 
             <div class="hangman-image">
@@ -66,6 +67,15 @@
                                 </form>
 
                             </div>
+                            {% if messages %}
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                        <li{% if message.tags %}
+                                            class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+
                         </div>
 
                     </div>
@@ -76,10 +86,14 @@
 
         <div id="junkyard-wrapper" class="tile">
             <div class="inner-junk">
-            <h4>Junk Yard</h4>
-            {% if junk %}
-                <p>{{ junk }}</p>
-            {% endif %}
+                <h4>Junk Yard</h4>
+                {% if junk %}
+                    {% for letter in junk %}
+                    <div class="junkbox">
+                        <p>{{ letter }}</p>
+                    </div>
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
 
@@ -97,8 +111,8 @@
 
         <div class="countdown tile">
             <div class="circle-pad">
-            <p>{{ guesses }}</p>
-                </div>
+                <p>{{ guesses }}</p>
+            </div>
         </div>
 
     </div>
@@ -111,6 +125,8 @@
         <script>
         $('#{{ form.letter.auto_id }}').prop("disabled", true);
         $('#submit-button').prop("disabled", true);
+
+
 
         </script>
 

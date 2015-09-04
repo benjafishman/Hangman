@@ -134,6 +134,11 @@
 }
 
 .circle-pad p {
-        margin-top: -9px;
+    margin-top: -9px;
     font-size: 67px;
+}
+
+.junkbox {
+    width: 74px;
+    overflow: hidden;
 }
