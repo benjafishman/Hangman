@@ -4,10 +4,15 @@ from django.dispatch import receiver
 # Create your models here.
 
 # TODO: rename vars to be more intuitive
+'''
+Hangman object:
+stores all relevant guesses, actual word value, session id, and max number of attempts
 
+Also implements checking if guesses were correct either on per letter basis/word itself
+'''
 class Hangman(models.Model):
     word = models.CharField(max_length=200)
-    max_number_guesses = models.IntegerField(default=6)
+    max_number_guesses = models.IntegerField(default=7)
     current_guess = models.CharField(max_length=200)
     current_guess_num = models.IntegerField(default=0)
     session_id = models.CharField(max_length=200, default='0000000')
@@ -55,6 +60,7 @@ class Hangman(models.Model):
     def has_guesses(self):
         if self.current_guess_num < self.max_number_guesses:
             return True
+
         return False
 
     def get_current_guess(self):
