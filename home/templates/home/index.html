@@ -4,13 +4,16 @@
 
 {% block header %}
     <link href="{% static 'index.css' %}" rel="stylesheet">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
 {% endblock header %}
 
 {% block content %}
-    <h1>Welcome to Ben</h1>
     <div id="hangman-start-button">
     <form action="{% url 'hangman:index' %}" class="inline">
-        <button class="float-left submit-button" >Hangman</button>
+        <input class="btn btn-default" id="submit-button" type="submit" value="Play"/>
     </form>
     </div>
 {% endblock content %}
