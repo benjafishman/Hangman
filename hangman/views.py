@@ -13,18 +13,19 @@ def index(request):
     if 'restart-game' in request.POST:
         request.session.flush()
         sid = hangman_modules.start_new_game()
-        request.session['session_id'] = sid
+        request.session['hangman_id'] = sid
         return HttpResponseRedirect('')
 
-    if 'session_id' not in request.session:
+    if 'hangman_id' not in request.session:
         sid = hangman_modules.start_new_game()
-        request.session['session_id'] = sid
+        request.session['hangman_id'] = sid
     # if this is a POST request we need to process the form data
     #guesses_left = 7
 
-    print('session_id is %s' % request.session['session_id'])
+    print('hangman_id is %s' % request.session['hangman_id'])
 
-    hangman = Hangman.objects.get(session_id=request.session['session_id'])
+    hangman = Hangman.objects.get(session_id=request.session['hangman_id'])
+    request.session.set_expiry(120)
     if request.method == 'POST':
 
 
@@ -35,7 +36,7 @@ def index(request):
         if form.is_valid():
             letter = form.cleaned_data['letter']
             print("you submitted: %s." % letter)
-            #hangman = Hangman.objects.get(session_id=request.session['session_id'])
+            #hangman = Hangman.objects.get(hangman_id=request.session['hangman_id'])
 
             game_over = False
 

@@ -1,9 +1,11 @@
-
+body {
+    font-family: monospace !important;
+}
 
 .wrapper {
     width: 620px;
     display: block;
-    margin: 0 auto;
+    margin: 40px auto;
 }
 
 #hangman-view-wrapper {
@@ -85,8 +87,12 @@
     margin-top: 10%;
     position: absolute;
     width: 344px;
-    margin-left: 40px;
-    margin-right: 60px;
+    margin-left: 53px;
+
+}
+
+#id_letter {
+    border-radius: 4px;
 }
 
 #results-wrapper {
@@ -141,4 +147,17 @@
 .junkbox {
     width: 74px;
     overflow: hidden;
+}
+
+.messages {
+    font-size: 22px;
+    list-style-type: none;
+    text-align: center;
+}
+.success {
+    color: springgreen;
+}
+
+.error {
+    color: red;
 }

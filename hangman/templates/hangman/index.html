@@ -5,12 +5,7 @@
 {# Load the tag library #}
 {% load bootstrap3 %}
 
-{# Load CSS and JavaScript #}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-
 {# Display django.contrib.messages as Bootstrap alerts #}
-{% bootstrap_messages %}
 
 {% block header %}
     <link href="{% static 'index1.css' %}" rel="stylesheet">
@@ -20,7 +15,7 @@
 {% endblock header %}
 
 {% block content %}
-    <h1>Hangman</h1>
+
     <div class="wrapper">
 
 
