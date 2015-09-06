@@ -7,3 +7,8 @@
     margin-left:-10px; /* -1/2 width */
     margin-top:20%; /* -1/2 height */
 }
+
+.btn {
+    background-color: #4888EF !important;
+    width: 100px !important;
+}
