@@ -24,8 +24,6 @@
                     {% with "images/Hangman-"|add:pic_num|add:".png" as picture %}
                         <img src="{% static picture %}" alt="hangman"/>'
                     {% endwith %}
-                {% else %}
-                    <img src="{% static 'images/Hangman-1.png' %}" alt="hangman"/>
                 {% endif %}
             </div>
 

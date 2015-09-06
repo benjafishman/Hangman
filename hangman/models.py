@@ -12,7 +12,7 @@ Also implements checking if guesses were correct either on per letter basis/word
 '''
 class Hangman(models.Model):
     word = models.CharField(max_length=200)
-    max_number_guesses = models.IntegerField(default=7)
+    max_number_guesses = models.IntegerField(default=10)
     current_guess = models.CharField(max_length=200)
     current_guess_num = models.IntegerField(default=0)
     session_id = models.CharField(max_length=200, default='0000000')
