@@ -1,12 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from .forms import GuessLetterForm
+
 from django.contrib import messages
-
 from hangman.managers import hangman_modules
+from .forms import GuessLetterForm
 from hangman.models import Hangman
-
-from django.views.generic.edit import FormView
 
 
 def index(request):
