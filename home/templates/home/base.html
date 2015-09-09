@@ -5,12 +5,133 @@
     {% block header %}
     {% endblock header %}
     <meta charset="UTF-8">
+    <script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
     <link href="{% static 'base.css' %}" rel="stylesheet">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <title>B</title>
 </head>
 <body>
-{% include 'home/left-side-bar.html' %}
+<div class="header">
+    <img src="{% static "images/cite_logo_fixed.png" %}" alt="CITE"/>'
+</div>
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Cite</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="#">Online Classes</a></li>
+                <li><a href="#about">Weekly Thought</a></li>
+                <li><a href="#contact">Q&A</a></li>
+                <li><a href="#contact">Donate</a></li>
+                <li><a href="#contact">Pictures</a></li>
+                <!--
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li class="dropdown-header">Nav header</li>
+                        <li><a href="#">Separated link</a></li>
+                        <li><a href="#">One more separated link</a></li>
+                    </ul>
+                </li> -->
+            </ul>
+            <!--
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="../navbar/">Default</a></li>
+                <li><a href="../navbar-static-top/">Static top</a></li>
+                <li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a></li>
+            </ul> -->
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</nav>
+
+<!--<div class="nav">
+    <ul>
+        <li><a href="#">Meet the Staff</a></li>
+        <li><a href="#">Online Classes</a></li>
+        <li><a href="#">Weekly Thought</a></li>
+        <li><a href="#">Q&A Blog</a></li>
+        <li><a href="#">Donate</a></li>
+        <li><a href="#">Picture Gallery</a></li>
+    </ul>
+</div>-->
+<div class="left-side-bar">
+
+    <div class="sidebar">
+        <h2>CITE</h2>
+
+        <h3>Archives</h3>
+
+        <ul>
+            <li>Food For Thought</li>
+            <li>D'var Torahs</li>
+        </ul>
+
+        <h4>Shiurim</h4>
+
+        <ul>
+            <li>Let's Shmuz</li>
+            <li>The Sugya</li>
+            <li>Jewish Brain Teasers & Torah Riddles</li>
+            <li>Binoseha Women Classes</li>
+            <li>Breakfast Speeches</li>
+        </ul>
+    </div>
+</div>
+
 {% block content %}
 {% endblock %}
+
+
+
+<script>
+
+    $(window).scroll(function() {
+      var pos = $(window).scrollTop();
+      if(pos < 170){
+        console.log("pos > 150");
+        $(".navbar-fixed-top").css("top","170px");
+    } else {
+        $(".navbar-fixed-top").css("top","0px");
+        console.log("pos < 150");
+    }
+    });
+    /*
+    var $window = $(window);
+    var pos = $window.scrollTop();
+    if(pos < 205){
+        console.log("pos > 150");
+        $(".navbar-fixed-top").css("top","170px");
+    } else {
+    console.log("pos < 150");
+    }
+    console.log(pos);
+    */
+
+
+</script>
 </body>
 </html>
