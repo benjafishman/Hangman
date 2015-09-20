@@ -1,0 +1,47 @@
+{% extends 'sefaria_daily_dose/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+    <h2>Hello World</h2>
+    <p>Daily Fix of Torah</p>
+    <div>
+        <input type="text" ng-model="sometext" />
+        <h1> Hello {{ sometext }}</h1>
+    </div>
+{% endblock content %}
+
+
+{% block script %}
+
+    <script>
+
+       var app = angular.module('myApp', []);
+app.controller('customersCtrl', function($scope, $http) {
+    $http.get("http://www.w3schools.com/angular/customers.php")
+    .success(function (response) {$scope.names = response.records;});
+});
+/*
+	var url = 'http://www.sefaria.org/api/index/';
+	$.ajax({
+	   type: 'GET',
+		url: url,
+		async: false,
+		contentType: "application/json",
+		dataType: 'jsonp',
+		success: function (data) {
+		    console.log(data);
+		    $.each(data, function(key,val){
+		            console.log(key+":::::"+val);
+		        });
+		},
+		error: function() {
+		    alert('Error occurred');
+		}
+	});
+	*/
+
+
+
+    </script>
+{% endblock %}

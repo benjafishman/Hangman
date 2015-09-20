@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'home',
     'hangman',
+    'sefaria_daily_dose',
 )
 
 MIDDLEWARE_CLASSES = (

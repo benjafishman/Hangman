@@ -19,6 +19,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^$', 'home.views.index'),
     url(r'^hangman/', include('hangman.urls', namespace="hangman")),
+    url(r'^daily-torah/', include('sefaria_daily_dose.urls', namespace="sefaria")),
     url(r'^admin/', include(admin.site.urls)),
 
 ]
