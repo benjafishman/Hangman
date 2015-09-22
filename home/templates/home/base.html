@@ -16,6 +16,8 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <title>B</title>
+    <script src="//fast.wistia.net/assets/external/E-v1.js" async></script>
+<script charset="ISO-8859-1" src="//fast.wistia.com/assets/external/popover-v1.js"></script>
 </head>
 <body>
 <div class="header">
@@ -23,7 +25,7 @@
 </div>
 
 <!-- Fixed navbar -->
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
@@ -57,16 +59,11 @@
                     </ul>
                 </li> -->
             </ul>
-            <!--
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="../navbar/">Default</a></li>
-                <li><a href="../navbar-static-top/">Static top</a></li>
-                <li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a></li>
-            </ul> -->
         </div>
         <!--/.nav-collapse -->
     </div>
 </nav>
+
 
 <!--<div class="nav">
     <ul>
@@ -81,8 +78,6 @@
 <div class="left-side-bar">
 
     <div class="sidebar">
-        <h2>CITE</h2>
-
         <h3>Archives</h3>
 
         <ul>
@@ -102,36 +97,22 @@
     </div>
 </div>
 
+<div id="home-video-wrapper">
+    <div class="center">
+    <a href="//fast.wistia.net/embed/iframe/mrxp0lh7g0?popover=true"
+       class="wistia-popover[height=360,playerColor=7b796a,width=640]"><img
+            src="{% static "images/cite_video.png" %}"
+            alt=""/></a>
+    </div>
+</div>
+
+
 {% block content %}
 {% endblock %}
 
 
 
 <script>
-
-    $(window).scroll(function() {
-      var pos = $(window).scrollTop();
-      if(pos < 170){
-        console.log("pos > 150");
-        $(".navbar-fixed-top").css("top","170px");
-    } else {
-        $(".navbar-fixed-top").css("top","0px");
-        console.log("pos < 150");
-    }
-    });
-    /*
-    var $window = $(window);
-    var pos = $window.scrollTop();
-    if(pos < 205){
-        console.log("pos > 150");
-        $(".navbar-fixed-top").css("top","170px");
-    } else {
-    console.log("pos < 150");
-    }
-    console.log(pos);
-    */
-
-
 </script>
 </body>
 </html>
