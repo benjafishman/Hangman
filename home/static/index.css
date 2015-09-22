@@ -12,3 +12,11 @@
     background-color: #4888EF !important;
     width: 100px !important;
 }
+
+.content {
+    width: 700px;
+    font-size: 18px;
+    line-height: 33px;
+    margin: 20px 20px 20px 24px;
+    float: left;
+}
