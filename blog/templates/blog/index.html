@@ -1,0 +1,14 @@
+{% extends 'blog/base.html' %}
+
+{% block title %} Blog Archive {% endblock %}
+
+{% block content %}
+    <h1> My Blog Categories: </h1>
+    {% for category in categories %}
+        <div class="post">
+            <a href="{% url 'blog:category_list' category.title %}">
+                    {{ category.title }}
+                </a>
+        </div>
+    {% endfor %}
+{% endblock %}
