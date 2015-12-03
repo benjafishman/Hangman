@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 
 from django.shortcuts import render_to_response, get_object_or_404
-from blog.models import Post, Category
+from blog.models import GemaraPost, Category
 
 '''
 The index view simply lists the categories one could click to look at
@@ -13,13 +13,17 @@ def index(request):
 
     #posts = Post.objects.filter(published=True)
     categories = Category.objects.all()
-    return render(request, 'blog/index.html', {'categories': categories})
+
+    # get most recent 5 parsha posts (posts with section == parsha)
+    gemara_posts = GemaraPost.objects.all()
+    #halacha_posts = Post.objects.filter(section__title__startswith='Halacha')
+    return render(request, 'blog/index.html', {'categories': categories, 'parsha_posts': gemara_posts})
 
 
 def post(request, slug):
     print("post view")
     # get the Post object
-    post = get_object_or_404(Post, slug=slug)
+    post = get_object_or_404(GemaraPost, slug=slug)
     # now return the rendered template
     return render(request, 'blog/post.html', {'post': post})
 

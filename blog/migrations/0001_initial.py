@@ -11,26 +11,29 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Blog',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
-                ('title', models.CharField(max_length=100, unique=True)),
-                ('slug', models.SlugField(max_length=100, unique=True)),
-                ('body', models.TextField()),
-                ('posted', models.DateField(db_index=True, auto_now_add=True)),
-            ],
-        ),
-        migrations.CreateModel(
             name='Category',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
-                ('title', models.CharField(max_length=100, db_index=True)),
-                ('slug', models.SlugField(max_length=100)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('title', models.CharField(max_length=255)),
             ],
+            options={
+                'ordering': ['-title'],
+            },
         ),
-        migrations.AddField(
-            model_name='blog',
-            name='category',
-            field=models.ForeignKey(to='blog.Category'),
+        migrations.CreateModel(
+            name='Post',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('title', models.CharField(unique=True, max_length=100)),
+                ('slug', models.SlugField(unique=True, max_length=100)),
+                ('description', models.CharField(max_length=255)),
+                ('content', models.TextField()),
+                ('published', models.BooleanField(default=True)),
+                ('created', models.DateTimeField(auto_now_add=True)),
+                ('categories', models.ManyToManyField(to='blog.Category')),
+            ],
+            options={
+                'ordering': ['-created'],
+            },
         ),
     ]

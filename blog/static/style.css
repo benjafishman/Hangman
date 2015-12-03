@@ -9,10 +9,16 @@ body {
 }
 
 div.content {
-    border: 1px solid #fbfbfb;
+    border: 3px solid #fbfbfb;
     background-color: #fff;
     max-width: 640px;
     width: 96%;
     padding: 2%;
     margin: 28px auto;
+}
+
+.base-navbar {
+    background: #000000;
+    height: 50px;
+    width: 100%;
 }
