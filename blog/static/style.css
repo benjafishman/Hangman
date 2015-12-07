@@ -8,17 +8,52 @@ body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+
 div.content {
     border: 3px solid #fbfbfb;
     background-color: #fff;
-    max-width: 640px;
+    max-width: 970px;
     width: 96%;
     padding: 2%;
     margin: 28px auto;
 }
 
 .base-navbar {
+    font-family: ariel,sans-serif;
     background: #000000;
     height: 50px;
     width: 100%;
+    color: red;
+    display: block;
+
+}
+.base-navbar a {
+    text-decoration: none;
+    color: red;
+}
+.base-navbar .BH{
+    float: right;
+    padding: 10px;
+}
+
+.base-navbar .logo{
+    font-weight: bold;
+    font-size: 31px;
+    float: left;
+    padding: 10px;
+}
+
+.page-navbar {
+    background-color: #27739F;
+    height: 45px;
+    width: 100%;
+
+}
+
+.page-navbar h2{
+    margin: 0;
+    padding: 10px;
+    margin-left: 5%;
+    color: white;
+    text-transform: uppercase;
 }

@@ -2,34 +2,25 @@
 
 {% load staticfiles %}
 
-{% block title %} Blog Archive {% endblock %}
+{% block title %} The Shteig {% endblock %}
 
 {% block header %}
  <link href="{% static 'blogindex.css' %}" rel="stylesheet">
-
 {% endblock %}
 
 {% block page-navbar %}
-    <div class="nav"></div>
+    <h2>{{ subheader }}</h2>
 {% endblock %}
 
 {% block content %}
-    <h2>Parsha</h2>
-      {% for post in parsha_posts %}
+    <h2>Posts</h2>
+      {% for post in gemara_posts %}
         <div class="post">
            <h2>
                 <a href="{{ post.get_absolute_url }}">
                     {{ post.title }}
                 </a>
             </h2>
-
-            <p>{{ post.description }}</p>
-
-            <h3>Category:
-                {% for category in post.categories.all %}
-                    <p>{{ category.title }}</p>
-                {% endfor %}
-            </h3>
             <p>
                 Posted on
                 <time datetime="{{ post.created|date:"c" }}">
@@ -38,31 +29,7 @@
             </p>
         </div>
     {% endfor %}
-    <h2>Halacha</h2>
-          {% for post in halacha_posts %}
-        <div class="post">
-           <h2>
-                <a href="{{ post.get_absolute_url }}">
-                    {{ post.title }}
-                </a>
-            </h2>
-
-            <p>{{ post.description }}</p>
-
-            <h3>Category:
-                {% for category in post.categories.all %}
-                    <p>{{ category.title }}</p>
-                {% endfor %}
-            </h3>
-            <p>
-                Posted on
-                <time datetime="{{ post.created|date:"c" }}">
-                    {{ post.created|date }}
-                </time>
-            </p>
-        </div>
-    {% endfor %}
-    <h1> My Blog Categories: </h1>
+    <h1> Categories: </h1>
     {% for category in categories %}
         <div class="post">
             <a href="{% url 'blog:category_list' category.title %}">

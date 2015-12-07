@@ -55,6 +55,9 @@ class GemaraPost(Post):
     daf = models.IntegerField(default=0, blank=True, null=True)
     amud = models.CharField(max_length=2, choices=AMUDS)
 
+    def get_title(self):
+        return self.gemara.title
+
 
 class Mesechta(models.Model):
     SEDERS = (
@@ -94,11 +97,14 @@ class Statement(models.Model):
     person = models.ForeignKey(Person, null=True)
     statement = models.TextField()
     gemara_post = models.ForeignKey(GemaraPost, null=True)
+    is_challenge = models.BooleanField(default=False)
+    is_resolution = models.BooleanField(default=False)
+
 
 
     def __str__(self):
         return u'%s' % self.id
-
+'''
 class Challenge(models.Model):
     title = models.CharField(max_length=100, unique=True)
     challenger = models.ForeignKey(Person, null=True)
@@ -118,8 +124,7 @@ class Challenge_Resolution(models.Model):
     def __str__(self):
         return u'%s' % self.id
 
-
-
+'''
 
 
 

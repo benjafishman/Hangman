@@ -14,18 +14,25 @@ def index(request):
     #posts = Post.objects.filter(published=True)
     categories = Category.objects.all()
 
+    shteig_header = "home"
+
     # get most recent 5 parsha posts (posts with section == parsha)
     gemara_posts = GemaraPost.objects.all()
     #halacha_posts = Post.objects.filter(section__title__startswith='Halacha')
-    return render(request, 'blog/index.html', {'categories': categories, 'parsha_posts': gemara_posts})
+    return render(request, 'blog/index.html', {'categories': categories, 'gemara_posts': gemara_posts, 'subheader': shteig_header})
 
+def about(request):
+    return render(request,'blog/about.html', context)
 
 def post(request, slug):
     print("post view")
     # get the Post object
     post = get_object_or_404(GemaraPost, slug=slug)
+    related_posts = GemaraPost.objects.all().exclude(pk=post.pk)
+
+    subheader = post.get_title()
     # now return the rendered template
-    return render(request, 'blog/post.html', {'post': post})
+    return render(request, 'blog/post-gemara.html', {'post': post, 'subheader': subheader, 'related_posts':related_posts})
 
 def category_post_list(request, category):
     print("category post view")

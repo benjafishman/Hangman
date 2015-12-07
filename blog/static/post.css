@@ -1,0 +1,41 @@
+.section {
+    background-color: #EDF1F5;
+    border-bottom-color: #D8DCE0;
+    box-shadow: 0 1px 2px rgba(0,0,0,.1);
+    margin: 10px;
+    padding-left: 10px;
+}
+
+.section h3{
+    margin: 0;
+}
+
+.section .inner {
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+.statement {
+    border: 1px solid #000000;
+    border-radius: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.post-type-wrapper {
+    display: inline-block;
+}
+
+.post {
+    width: 720px;
+    float:left;
+}
+
+.right-side-bar {
+    width: 230px;
+    text-align: center;
+    margin: auto 10px;
+    margin-top: 9%;
+    float: left;
+
+}

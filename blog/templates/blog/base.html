@@ -13,10 +13,15 @@
 </head>
 <body>
 <div class="base-navbar">
-    <span>The Shteig</span>
+    <a href="{% url 'blog:index' %}" class="logo">The Shteig</a>
+    <span class="BH">
+        בס״ד
+        </span>
 </div>
-{% block page-navbar %}
-{% endblock %}
+<div class="page-navbar">
+    {% block page-navbar %}
+    {% endblock %}
+</div>
 <div class="content">
     {% block content %}
     {% endblock %}

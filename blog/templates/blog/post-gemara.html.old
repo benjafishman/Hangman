@@ -1,0 +1,76 @@
+{% extends 'blog/base.html' %}
+{% load staticfiles %}
+
+{% block header %}
+    <link href="{% static 'post.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block page-navbar %}
+    <h2>Gemara: {{ subheader }}</h2>
+{% endblock %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <article>
+        <header>
+            <h1> {{ post.title }} </h1>
+
+            <h3>Daf: {{ post.daf }} </h3>
+            {% if post.statement_set %}
+                <div class="section">
+                    <h3>The Breakdown</h3>
+
+                    <div class="inner">
+                        {% for s in post.statement_set.all %}
+                            <div class="statement">
+                                <p>{{ s.statement }}</p>
+
+                                <p>~{{ s.person.name }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <p>no statements exist</p>
+            {% endif %}
+
+            {% if post.content %}
+                <div class="section">
+                    <h3>Notes On the Daf</h3>
+                    <di class="inner">
+                        {{ post.content|safe }}
+                    </di>
+                </div>
+            {% endif %}
+            <div class="section">
+                <p>
+                    Posted on
+                    <time datetime="{{ post.created|date:"c" }}">
+                        {{ post.created|date }}
+                    </time>
+                </p>
+            </div>
+        </header>
+        <div class="section">
+            <p class="description">
+                {{ post.description }}
+            </p>
+        </div>
+    </article>
+{% endblock %}
+
+{% block right-side-bar %}
+<div class="right-side">
+    <h3>Related Post</h3>
+    {% if other_posts %}
+        {% for other in other_posts %}
+            <a href="{{ post.get_absolute_url }}">
+                {{ post.title }}
+            </a>
+        {% endfor %}
+    {% else %}
+        <p>No related posts</p>
+    {% endif %}
+</div>
+{% endblock %}

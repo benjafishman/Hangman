@@ -1,22 +1,24 @@
 {% extends 'blog/base.html' %}
 
+{% load staticfiles %}
+
+{% block header %}
+    <link href="{% static 'post.css' %}" rel="stylesheet">
+{% endblock %}
+
+
 {% block title %}{{ post.title }}{% endblock %}
+<p>Hello world</p>
 
 {% block content %}
-    <article>
-        <header>
-            <h1> {{ post.title }} </h1>
-
-            <p>
-                Posted on
-                <time datetime="{{ post.created|date:"c" }}">
-                    {{ post.created|date }}
-                </time>
-            </p>
-        </header>
-        <p class="description">
-            {{ post.description }}
-        </p>
-        {{ post.content|safe }}
-    </article>
+    <div class="post-type-wrapper">
+    <div class="post">
+        {% block post %}
+        {% endblock %}
+    </div>
+    <div class="right-side-bar">
+        {% block right-side-bar %}
+        {% endblock %}
+    </div>
+    </div>
 {% endblock %}
