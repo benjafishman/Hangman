@@ -33,7 +33,7 @@ div.content {
 }
 .base-navbar .BH{
     float: right;
-    padding: 10px;
+    padding-right: 10px;
 }
 
 .base-navbar .logo{
@@ -53,7 +53,6 @@ div.content {
 .page-navbar h2{
     margin: 0;
     padding: 10px;
-    margin-left: 5%;
     color: white;
     text-transform: uppercase;
 }

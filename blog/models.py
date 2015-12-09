@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.urlresolvers import reverse
-
 # Create your models here.
 
 class Category(models.Model):
@@ -104,28 +103,6 @@ class Statement(models.Model):
 
     def __str__(self):
         return u'%s' % self.id
-'''
-class Challenge(models.Model):
-    title = models.CharField(max_length=100, unique=True)
-    challenger = models.ForeignKey(Person, null=True)
-    challenged_statement = models.ForeignKey(Statement)
-    content = models.TextField()
-    gemara_post = models.ForeignKey(GemaraPost)
-
-
-    def __str__(self):
-        return u'%s' % self.title
-
-class Challenge_Resolution(models.Model):
-    challenge = models.ForeignKey(Challenge)
-    resolver = models.ForeignKey(Person)
-    resolution_text = models.TextField()
-
-    def __str__(self):
-        return u'%s' % self.id
-
-'''
-
 
 
 

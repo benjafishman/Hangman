@@ -7,19 +7,28 @@
 {% block post %}
     <article>
         <header>
+        <div class="post-heading">
             <h1> {{ post.title }} </h1>
 
-            <h3>Daf: {{ post.daf }} </h3>
+            <p>Daf: {{ post.daf }} </p>
+            <p>Amud:
+                {% if post.amud == '0' %}
+                    &#1488;
+                    {% else %}
+                   &#1489;
+                {% endif %}
+            </p>
+        </div>
             {% if post.statement_set %}
                 <div class="section">
                     <h3>The Breakdown</h3>
 
                     <div class="inner">
                         {% for s in post.statement_set.all %}
-                            <div class="statement">
+                            <div class="jelly">
                                 <p>{{ s.statement }}</p>
 
-                                <p>~{{ s.person.name }}</p>
+                                <p>~ {{ s.person.name }}</p>
                             </div>
                         {% endfor %}
                     </div>
@@ -31,9 +40,12 @@
             {% if post.content %}
                 <div class="section">
                     <h3>Notes On the Daf</h3>
-                    <di class="inner">
-                        {{ post.content|safe }}
-                    </di>
+
+                    <div class="inner">
+                        <div class="jelly">
+                            <p>{{ post.content|safe }}</p>
+                        </div>
+                    </div>
                 </div>
             {% endif %}
             <div class="section">

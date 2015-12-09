@@ -1,3 +1,13 @@
+.post-heading {
+    text-align: center;
+    font-size: 16px;
+}
+
+.post-heading p {
+    margin:0;
+}
+
+
 .section {
     background-color: #EDF1F5;
     border-bottom-color: #D8DCE0;
@@ -7,6 +17,7 @@
 }
 
 .section h3{
+    padding-top: 10px;
     margin: 0;
 }
 
@@ -15,11 +26,16 @@
     padding-bottom: 10px;
 }
 
-.statement {
-    border: 1px solid #000000;
+.jelly {
+    border: 3px solid #000000;
     border-radius: 10px;
-    margin-top: 5px;
+    margin-top: 10px;
     margin-bottom: 5px;
+    background-color: #ffffff;
+}
+
+.jelly p{
+    margin-left: 15px;
 }
 
 .post-type-wrapper {
@@ -27,8 +43,10 @@
 }
 
 .post {
-    width: 720px;
+    width: 719px;
     float:left;
+    border-right: 1px solid #000000;
+
 }
 
 .right-side-bar {
@@ -37,5 +55,6 @@
     margin: auto 10px;
     margin-top: 9%;
     float: left;
+
 
 }
