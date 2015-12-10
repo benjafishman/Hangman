@@ -98,11 +98,19 @@ class Statement(models.Model):
     gemara_post = models.ForeignKey(GemaraPost, null=True)
     is_challenge = models.BooleanField(default=False)
     is_resolution = models.BooleanField(default=False)
-
-
+    is_mishnah = models.BooleanField(default=False)
+    is_gemara = models.BooleanField(default=False)
 
     def __str__(self):
         return u'%s' % self.id
+
+class PageDictionary(models.Model):
+    hebrew_word = models.CharField(max_length=100, unique=True)
+    english_word = models.CharField(max_length=100, unique=True)
+    gemara_post = models.ForeignKey(GemaraPost, null=True)
+
+    def __str__(self):
+        return u'%s' % self.english_word
 
 
 

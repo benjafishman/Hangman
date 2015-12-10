@@ -1,8 +1,8 @@
 from django.contrib import admin
 # Register your models here.
 
-from blog.models import GemaraPost, Category, Section, Mesechta, Gemara, Statement, Person
-
+from blog.models import GemaraPost, Category, Section, Mesechta, \
+    Gemara, Statement, Person
 '''
 class ChallengeInline(admin.TabularInline):
     model = Challenge
@@ -11,7 +11,7 @@ class ChallengeInline(admin.TabularInline):
 
 class StatementInline(admin.TabularInline):
     model = Statement
-    extra = 3
+    extra = 0
 
 class GemaraPostAdmin(admin.ModelAdmin):
 
@@ -24,18 +24,6 @@ class GemaraPostAdmin(admin.ModelAdmin):
     date_heirarchy = 'created'
     save_on_top = True
     prepopulated_fields = {'slug': ('title',)}
-    '''
-    fieldsets = [
-        (None,               {'fields': ['title', 'description']}),
-        ('Date information', {'fields': ['published']}),
-    ]
-    date_heirarchy = 'created'
-    save_on_top = True
-    prepopulated_fields = {'slug': ('title',)}
-    '''
-
-
-
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['title']

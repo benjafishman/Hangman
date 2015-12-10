@@ -36,6 +36,8 @@
 
 .jelly p{
     margin-left: 15px;
+    margin-right: 15px;
+    font-size: 18px;
 }
 
 .post-type-wrapper {
@@ -57,4 +59,10 @@
     float: left;
 
 
+}
+
+.jelly .quote {
+    padding-right: 10px;
+    text-align: right;
+    font-size: 13px;
 }
