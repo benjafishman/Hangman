@@ -1,0 +1,26 @@
+{% extends 'blog/post.html' %}
+
+{% block page-navbar %}
+    <h2>Parsha: {{ question.parsha.eng_name }}</h2>
+{% endblock %}
+
+{% block post %}
+    {% with question.parsha.eng_name.split|join:"_" as new_val %}
+        <a href="{% url 'blog:parsha_questions_list' new_val %}">&#8592;</a>
+    {% endwith %}
+    <article>
+        <h2>{{ question.title }}</h2>
+        <p>{{ question.content|safe }}</p>
+    </article>
+{% endblock %}
+
+{% block right-side-bar %}
+    {% if related_questions %}
+        <h3>Other Question in {{ question.parsha.eng_name }}</h3>
+        <ul>
+        {% for q in related_questions %}
+            <li><a href="{% url 'blog:parsha_question_detail' q.id %}">{{ q.title }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

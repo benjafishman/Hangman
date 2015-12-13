@@ -1,0 +1,27 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    {% if books %}
+        <ul>
+        {% for key, value_list in books.items %}
+            {{ key }}
+            <ul>
+            {% if value_list %}
+                {% for value in value_list %}
+                    <li>
+                        {% with value.split|join:"_" as new_val %}
+
+                        <a href="{% url 'blog:parsha_questions_list' new_val %}">{{ value }}</a>
+                        {% endwith %}
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li>No values</li>
+            {% endif %}
+            </ul>
+        {% endfor %}
+    {% else %}
+        <p>There are no books.</p>
+    {% endif %}
+{% endblock %}
+

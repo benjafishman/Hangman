@@ -44,6 +44,15 @@ class Post(models.Model):
     def get_categories(self):
         return ", ".join([c.title for c in self.categories.all()])
 
+    def get_title(self):
+        return self.title
+
+class ParshaPost(Post):
+    CHUMASH = ((1,'Genesis'),(2,'Exodus'),(3,'Leviticus'),(4,'Deutoronomy'),(5,'Bamidbar'))
+    sefer = models.IntegerField(choices=CHUMASH)
+
+    def get_template_suffix(self):
+        return 'parsha'
 
 class GemaraPost(Post):
     AMUDS = (
@@ -57,21 +66,6 @@ class GemaraPost(Post):
     def get_title(self):
         return self.gemara.title
 
-
-class Mesechta(models.Model):
-    SEDERS = (
-        ('Zr', 'Zraim'),
-        ('Mo', 'Moed'),
-        ('Na', 'Nashim'),
-        ('Ne', 'Nesikim'),
-        ('Ko', 'Kodashim'),
-        ('To', 'Toharoth'),
-    )
-    seder = models.CharField(max_length=2, choices=SEDERS)
-
-    def __str__(self):
-        seder_dict = {'Zr': 'Zraim', 'Mo': 'Moed' ,'Na':'Nashim', 'Ne':'Nesikim', 'Ko':'Kodashim','To':'Toharoth'}
-        return u'%s' % seder_dict[self.seder]
 
 class Gemara(models.Model):
     title = models.CharField(max_length=100, unique=True)
@@ -104,13 +98,47 @@ class Statement(models.Model):
     def __str__(self):
         return u'%s' % self.id
 
-class PageDictionary(models.Model):
-    hebrew_word = models.CharField(max_length=100, unique=True)
-    english_word = models.CharField(max_length=100, unique=True)
-    gemara_post = models.ForeignKey(GemaraPost, null=True)
+class Question(models.Model):
+    title = models.CharField(max_length=100, unique=True)
+    content = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        abstract = True
+        ordering = ['-created']
 
     def __str__(self):
-        return u'%s' % self.english_word
+        return u'%s' % self.title
+
+class ParshaQuestion(Question):
+     parsha = models.ForeignKey('Parsha', null=True)
+
+
+class Chumash(models.Model):
+    title = models.CharField(max_length=100, unique=True)
+    order = models.IntegerField(default=0, unique=True)
+
+    def __str__(self):
+        return u'%s' % self.title
+
+class Parsha(models.Model):
+    eng_name = models.CharField(max_length=100, unique=True)
+    chumash = models.ForeignKey(Chumash, null=True)
+    order = models.IntegerField(default=0, unique=True)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return u'%s' % self.eng_name
+
+    def sefer(self):
+        return self.chumash.title
+
+    class Meta:
+        ordering = ['order']
+
+
 
 
 

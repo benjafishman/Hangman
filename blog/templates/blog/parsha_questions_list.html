@@ -1,0 +1,16 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    <a href="{% url 'blog:chumash_parsha_listing' %}">&#8592;</a>
+    {% if questions %}
+        <ul>
+            {% for q in questions %}
+                <ul>
+                    <a href="{% url 'blog:parsha_question_detail' q.id %}">{{ q.title }}</a>
+                </ul>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no Questions Yet...</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'blog/post.html' %}
+
+{% block page-navbar %}
+    <h2>Sefer: {{ subheader }}</h2>
+{% endblock %}
+
+{% block post %}
+<article>
+<p>{{ post.content|safe }}</p>
+</article>
+{% endblock %}
+
+{% block right-side-bar %}
+{% endblock %}
