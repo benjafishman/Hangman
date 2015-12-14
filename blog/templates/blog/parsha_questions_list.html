@@ -1,16 +1,34 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-    <a href="{% url 'blog:chumash_parsha_listing' %}">&#8592;</a>
-    {% if questions %}
-        <ul>
-            {% for q in questions %}
-                <ul>
-                    <a href="{% url 'blog:parsha_question_detail' q.id %}">{{ q.title }}</a>
-                </ul>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>There are no Questions Yet...</p>
-    {% endif %}
+    <div class="container">
+        <a href="{% url 'blog:chumash_parsha_listing' %}">&#8592;</a>
+
+        <h2>{{ title }}</h2>
+
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Question</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if questions %}
+                {% for question in questions %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'blog:parsha_question_detail' question.id %}">{{ question.title }}</a>
+                        </td>
+                        <td>{{ question.created }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td>No questions</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
