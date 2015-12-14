@@ -59,6 +59,21 @@ def chumash_parsha_listing(request):
     }
     return render(request, 'blog/chumash-parsha-list.html', {'books':chumash})
 
+def sefer_parsha_listing(request, sefer):
+
+    chumash = {'Genesis':
+                   ['Bereishis','Noach','Lech Lecha', 'Vayeira','Chayei Sara', 'Toldos', 'Vayeitzei',\
+                    'Vayishlach','Vayeishev','Mikeitz','Vayigash','Vayechi'],
+               'Exodus':[],
+               'Leviticus':[],
+               'Numbers':[],
+               'Deuteronomy':[]
+    }
+    parshas = []
+    if sefer in chumash:
+        parshas = chumash[sefer]
+    print(parshas)
+    return render(request, 'blog/sefer_parsha_listing.html', {'parshas':parshas, 'sefer':sefer})
 
 def parsha_questions_list(request, parsha_name):
     # get all questions related to parsha id returned in descending order by date creaed

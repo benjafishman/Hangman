@@ -1,8 +1,12 @@
 {% load staticfiles %}
-
+{% load bootstrap3 %}
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
     <link href="{% static 'style.css' %}" rel="stylesheet">
     <meta charset="utf-8">
     {% block header %}
@@ -12,12 +16,53 @@
     </title>
 </head>
 <body>
-<div class="base-navbar">
+<!--<div class="base-navbar">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
     <a href="{% url 'blog:index' %}" class="logo">Project Chazarah</a>
     <span class="BH">
         בס״ד
         </span>
 </div>
+</nav>-->
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand logo" href="{% url 'blog:index' %}">Project Chazarah</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <!--<li><a href="{% url 'blog:chumash_parsha_listing' %}">Parsha</a></li>-->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Parsha <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'blog:sefer_parsha_listing' 'Genesis' %}">Bereishis</a></li>
+                        <li><a href="{% url 'blog:sefer_parsha_listing' 'Exodus' %}">Shemos</a></li>
+                        <li><a href="{% url 'blog:sefer_parsha_listing' 'Leviticus' %}">Vayikra</a></li>
+                        <li><a href="{% url 'blog:sefer_parsha_listing' 'Numbers' %}">Bamidbar</a></li>
+                        <li><a href="{% url 'blog:sefer_parsha_listing' 'Deuterononmy' %}">Devarim</a></li>
+                        <li role="separator" class="divider"></li>
+                    </ul>
+                </li>
+            </ul>
+            <span class="BH">
+        בס״ד
+</span>
+        </div>
+        <!--/.nav-collapse -->
+
+    </div>
+</nav>
 <div class="page-navbar">
     {% block page-navbar %}
     {% endblock %}

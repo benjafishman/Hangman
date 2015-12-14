@@ -31,16 +31,14 @@ div.content {
     text-decoration: none;
     color: red;
 }
-.base-navbar .BH{
+.container .BH{
     float: right;
-    padding-right: 10px;
+    color: #337ab7;
 }
 
-.base-navbar .logo{
+.container .logo{
     font-weight: bold;
     font-size: 31px;
-    float: left;
-    padding: 10px;
 }
 
 .page-navbar {

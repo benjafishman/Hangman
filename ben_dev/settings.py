@@ -42,6 +42,8 @@ INSTALLED_APPS = (
     'home',
     'hangman',
     'blog',
+    'bootstrap3',
+    'jquery'
 )
 
 MIDDLEWARE_CLASSES = (

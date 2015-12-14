@@ -1,0 +1,18 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<h2>{{ sefer }}</h2>
+<ul>
+    {% if parshas %}
+        {% for parsha in parshas %}
+            <li>
+                {% with parsha.split|join:"_" as new_val %}
+                    <a href="{% url 'blog:parsha_questions_list' new_val %}">{{ parsha }}</a>
+                {% endwith %}
+            </li>
+        {% endfor %}
+    {% else %}
+        <li>No parshas</li>
+    {% endif %}
+</ul>
+{% endblock %}
