@@ -43,7 +43,8 @@ INSTALLED_APPS = (
     'hangman',
     'blog',
     'bootstrap3',
-    'jquery'
+    'jquery',
+    'minyan_mailer',
 )
 
 MIDDLEWARE_CLASSES = (
