@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'^$', 'home.views.index'),
     url(r'^hangman/', include('hangman.urls', namespace="hangman")),
     url(r'^blog/', include('blog.urls', namespace="blog")),
+    url(r'^minyan_mailer/', include('minyan_mailer.urls', namespace="minyan_mailer")),
     url(r'^admin/', include(admin.site.urls))
 ]
