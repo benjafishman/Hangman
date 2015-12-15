@@ -96,9 +96,10 @@ def parsha_questions_list(request, parsha_name):
 
     # convert query string to lower case
     title = parsha_name.title()
+    sefer = parsha_to_sefer(parsha_name)
     questions = ParshaQuestion.objects.filter(parsha__eng_name=parsha_name).order_by('created')
 
-    return render(request, 'blog/parsha_questions_list.html', {'questions': questions, 'title':title})
+    return render(request, 'blog/parsha_questions_list.html', {'questions': questions, 'title':title, 'sefer':sefer})
 
 
 def parsha_question_detail(request, question_id):
@@ -109,18 +110,23 @@ def parsha_question_detail(request, question_id):
     return render(request, 'blog/parsha_question_detail.html',
                   {'question': question, 'related_questions': related_question})
 
-def parsha_to_chumash(parsha):
+def parsha_to_sefer(parsha):
+    '''
+    : This is a helper function to get the name of the
+    : overarching sefer a parsha is in
+    :param parsha: string
+    :return: name of parent sefer
+    '''
     chumash = {'Genesis':
                    ['Bereishis', 'Noach', 'Lech Lecha', 'Vayeira', 'Chayei Sara', 'Toldos', 'Vayeitzei', \
                     'Vayishlach', 'Vayeishev', 'Miketz', 'Vayigash', 'Vayechi'],
                'Exodus': [],
                'Leviticus': [],
                'Numbers': [],
-               'Deuteronomy': ['deuteronomy', 'eikev']
+               'Deuteronomy': ['Deuteronomy', 'Eikev']
     }
 
     for sefer in chumash:
-        if parsha.title() in chumash[sefer]:
+        if parsha.title().replace("_"," ") in chumash[sefer]:
             return sefer
-
     return False

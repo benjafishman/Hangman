@@ -1,0 +1,15 @@
+.article-wrapper {
+    width: 660px;
+    float: left;
+}
+
+.right-side-bar {
+    width: 230px;
+    text-align: center;
+    margin: 0 10px;
+    float: left;
+}
+
+.right-side-bar li {
+    list-style-type: none;
+}

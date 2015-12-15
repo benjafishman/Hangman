@@ -1,26 +1,33 @@
 {% extends 'blog/post.html' %}
+{% load staticfiles %}
 
+{% block header %}
+    <link href="{% static 'parsha-question.css' %}" rel="stylesheet">
+{% endblock %}
 {% block page-navbar %}
     <h2>Parsha: {{ question.parsha.eng_name }}</h2>
 {% endblock %}
 
 {% block post %}
-    {% with question.parsha.eng_name.split|join:"_" as new_val %}
-        <a href="{% url 'blog:parsha_questions_list' new_val %}">&#8592;</a>
-    {% endwith %}
-    <article>
-        <h2>{{ question.title }}</h2>
-        <p>{{ question.content|safe }}</p>
-    </article>
+    <div class="article-wrapper">
+        <div class="artcile-head">
+            <h2>{{ question.title|title }}</h2>
+
+            <h3>Parsha: {{ question.parsha.eng_name|title }}</h3>
+        </div>
+        <article>
+            <p>{{ question.content|safe }}</p>
+        </article>
+    </div>
 {% endblock %}
 
 {% block right-side-bar %}
     {% if related_questions %}
-        <h3>Other Question in {{ question.parsha.eng_name }}</h3>
+        <h3>More Questions</h3>
         <ul>
-        {% for q in related_questions %}
-            <li><a href="{% url 'blog:parsha_question_detail' q.id %}">{{ q.title }}</a></li>
-        {% endfor %}
+            {% for q in related_questions %}
+                <li><a href="{% url 'blog:parsha_question_detail' q.id %}">{{ q.title }}</a></li>
+            {% endfor %}
         </ul>
     {% endif %}
 {% endblock %}

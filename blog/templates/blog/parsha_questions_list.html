@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="container">
-        <a href="{% url 'blog:chumash_parsha_listing' %}">&#8592;</a>
+        <a href="{% url 'blog:sefer_parsha_listing' sefer %}">&#8592;</a>
 
         <h2>{{ title }}</h2>
 
@@ -18,9 +18,9 @@
                 {% for question in questions %}
                     <tr>
                         <td>
-                            <a href="{% url 'blog:parsha_question_detail' question.id %}">{{ question.title }}</a>
+                            <a href="{% url 'blog:parsha_question_detail' question.id %}">{{ question.title|title }}</a>
                         </td>
-                        <td>{{ question.created }}</td>
+                        <td>{{ question.created|date:'Y-m-d' }}</td>
                     </tr>
                 {% endfor %}
             {% else %}

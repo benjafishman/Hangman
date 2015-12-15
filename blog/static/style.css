@@ -13,7 +13,7 @@ div.content {
     border: 3px solid #fbfbfb;
     background-color: #fff;
     /*max-width: 970px;*/
-    width: 96%;
+    width: 1022px;
     padding: 2%;
     margin: 28px auto;
 }
@@ -53,4 +53,10 @@ div.content {
     padding: 10px;
     color: white;
     text-transform: uppercase;
+}
+
+@media (min-width: 1200px){
+.container {
+    width: 970px !important;
+}
 }

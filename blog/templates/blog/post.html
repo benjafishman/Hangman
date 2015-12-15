@@ -3,7 +3,6 @@
 {% load staticfiles %}
 
 {% block header %}
-    <link href="{% static 'post.css' %}" rel="stylesheet">
 {% endblock %}
 
 
@@ -11,11 +10,10 @@
 <p>Hello world</p>
 
 {% block content %}
-    <div class="post-type-wrapper">
-    <div class="post">
+    <a href="{% url 'blog:parsha_questions_list' question.parsha.eng_name %}">&#8592;</a>
+    <div class="container">
         {% block post %}
         {% endblock %}
-    </div>
     <div class="right-side-bar">
         {% block right-side-bar %}
         {% endblock %}

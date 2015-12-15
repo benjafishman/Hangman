@@ -17,7 +17,7 @@
                     <tr>
                         <td>
                             {% with parsha.parsha__eng_name.split|join:"_" as new_val %}
-                                <a href="{% url 'blog:parsha_questions_list' new_val %}">{{ parsha.parsha__eng_name }}</a>
+                                <a href="{% url 'blog:parsha_questions_list' new_val %}">{{ parsha.parsha__eng_name|title }}</a>
                             {% endwith %}
                         </td>
                         <td>{{ parsha.total }}</td>
