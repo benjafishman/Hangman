@@ -1,0 +1,12 @@
+{% extends 'minyan_mailer/base.html' %}
+{% block content %}
+    <form action="#" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>
+    <div>
+    <h3>Register Your Own Minyan</h3>
+    <a href="{% url 'minyan_mailer:minyan_sign_up' %}">Register</a>
+    </div>
+{% endblock content %}

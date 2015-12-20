@@ -5,11 +5,33 @@
     {% block header %}
     {% endblock header %}
     <meta charset="UTF-8">
-    <title>Sign Up</title>
+    <title>Minyan Mailer | {% block title %}{% endblock %}</title>
 </head>
 <body>
+<header>
+    <h1>Minyan Mailer | {% block page-title %}{% endblock %}</h1>
+    {% if user.username%}
+        <p>Hello  {{ user.username }}</p>
+    {% endif %}
+</header>
+
+<section>
+    <ul>
+        <li><a href="{% url 'minyan_mailer:index' %}">home</a></li>
+        {% if user.is_authenticated%}
+            <li><a href="{% url 'minyan_mailer:gabbai_home' %}">My Minyanim</a></li>
+            <li><a href="/logout/">logout</a></li>
+        {% else %}
+            <li><a href="/login/">login</a></li>
+        {% endif %}
+    </ul>
+</section>
 {% block content %}
 {% endblock content %}
+
+<footer>
+    <span>&copy; 2015, FishBowl Labs</span>
+</footer>
 
 {% block script %}
 {% endblock %}

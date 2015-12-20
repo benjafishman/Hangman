@@ -21,5 +21,10 @@ urlpatterns = [
     url(r'^hangman/', include('hangman.urls', namespace="hangman")),
     url(r'^blog/', include('blog.urls', namespace="blog")),
     url(r'^minyan_mailer/', include('minyan_mailer.urls', namespace="minyan_mailer")),
-    url(r'^admin/', include(admin.site.urls))
+    url(r'^admin/', include(admin.site.urls)),
+
+
+    # Login / logout
+    url(r'^login/$', 'django.contrib.auth.views.login'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout'),
 ]

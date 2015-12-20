@@ -1,9 +1,9 @@
 {% extends 'minyan_mailer/base.html' %}
 {% block content %}
-    <h1>Sign Up</h1>
+    <h1>Create New Davening</h1>
     <form action="#" method="post">
         {% csrf_token %}
-        {{ gabbai_form.as_p }}
-        {{ form.as_p }}
+        {{ form }}
         <input type="submit" value="Submit"/>
+    </form>
 {% endblock content %}
