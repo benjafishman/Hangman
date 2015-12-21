@@ -3,4 +3,29 @@
 {% block content %}
     <h1>Hello {{ user.username }}</h1>
     <p>Here are your current minyans:</p>
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Minyan</th>
+            <th>Created</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if minyans %}
+            {% for m in minyans %}
+                <tr>
+                    <td>
+                        {{ m.name }}
+                    </td>
+                    <td>{{ m.created|date:'Y-m-d' }}</td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td>No Minyans</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <a href="{% url 'minyan_mailer:minyan_register' %}">Register</a>
 {% endblock content %}

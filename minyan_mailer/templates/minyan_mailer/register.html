@@ -1,6 +1,7 @@
 {% extends 'minyan_mailer/base.html' %}
+{% block page-title %}Register Minyan{% endblock %}
 {% block content %}
-    <h1>Sign Up</h1>
+    <h1>Register Minyan</h1>
     <form action="#" method="post">
         {% csrf_token %}
         {{ gabbai_form.as_p }}

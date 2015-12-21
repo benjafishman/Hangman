@@ -18,7 +18,7 @@
 <section>
     <ul>
         <li><a href="{% url 'minyan_mailer:index' %}">home</a></li>
-        {% if user.is_authenticated%}
+        {% if user.is_authenticated %}
             <li><a href="{% url 'minyan_mailer:gabbai_home' %}">My Minyanim</a></li>
             <li><a href="/logout/">logout</a></li>
         {% else %}
@@ -28,7 +28,7 @@
 </section>
 {% block content %}
 {% endblock content %}
-
+<br><br>
 <footer>
     <span>&copy; 2015, FishBowl Labs</span>
 </footer>
