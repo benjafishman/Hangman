@@ -15,7 +15,7 @@
             {% for m in minyans %}
                 <tr>
                     <td>
-                        {{ m.name }}
+                        <a href="{% url 'minyan_mailer:minyan_detail' m.id %}">{{ m.name }}</a>
                     </td>
                     <td>{{ m.created|date:'Y-m-d' }}</td>
                 </tr>

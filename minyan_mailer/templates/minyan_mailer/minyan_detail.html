@@ -1,0 +1,41 @@
+{% extends 'minyan_mailer/base.html' %}
+
+{% load minyan_mailer_filters %}
+
+{% block page-title %}{% endblock %}
+{% block content %}
+    <h1>{{ minyan.name }}</h1>
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Davening</th>
+            <th>Weekday</th>
+            <th>Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if davenings %}
+            {% for d in davenings %}
+                <tr>
+                    <td>
+
+                        <a href="{% url 'minyan_mailer:davening_detail' d.id %}">{{ d.title }}</a>
+                    </td>
+                    <td>{{ d.day_of_week|get_weekday_string|title }}</td>
+                    <td>{{ d.davening_time|time }}</td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td>No Davenings</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+    {% if user.is_authenticated %}
+        {# TODO: check for authentication and if is gabbai #}
+        <a href="{% url 'minyan_mailer:new_davening' minyan.id %}">New Davening</a>
+    {% endif %}
+
+{% endblock content %}

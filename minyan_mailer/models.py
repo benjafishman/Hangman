@@ -62,8 +62,4 @@ class Davening(models.Model):
     def __str__(self):
         return u'%s' % self.title
 
-class DaveningForm(ModelForm):
-    class Meta:
-        model = Davening
-        fields = ['title', 'day_of_week','davening_time', 'group']
 

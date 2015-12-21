@@ -1,0 +1,47 @@
+{% extends 'minyan_mailer/base.html' %}
+
+{% load minyan_mailer_filters %}
+
+{% block page-title %}Davening{% endblock %}
+{% block content %}
+    <table class="table table-striped table-bordered">
+        <thead>
+        </thead>
+        <tbody>
+        {% if davening %}
+            <tr>
+                <td>Title</td>
+                <td>{{ davening.title }}</td>
+            </tr>
+            <tr>
+                <td>Weekday</td>
+                <td>{{ davening.day_of_week|get_weekday_string|title }}</td>
+            </tr>
+            <tr>
+                <td>Title</td>
+                <td>{{ davening.davening_time|time }}</td>
+            </tr>
+            <tr>
+                <td>Minyan</td>
+                <td>{{ davening.minyan.name|title }}</td>
+            </tr>
+            <tr>
+                <td>Time</td>
+                <td>{{ davening.davening_time|time }}</td>
+            </tr>
+            <tr>
+                <td>Email Group</td>
+                {% if davening.group %}
+                    <td>{{ davening.group.title|title }}</td>
+                {% else %}
+                    <td>None</td>
+                {% endif %}
+            </tr>
+        {% else %}
+            <tr>
+                <td>No Davening</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+{% endblock content %}
