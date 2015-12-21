@@ -16,7 +16,7 @@ class DaveningAdmin(admin.ModelAdmin):
     #inlines = [Davening_GroupInline]
 
 class Davening_GroupAdmin(admin.ModelAdmin):
-    list_display = ['title', 'email']
+    list_display = ['title']
 
 
 admin.site.register(Minyan, MinyanAdmin)

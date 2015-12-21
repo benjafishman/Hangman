@@ -18,16 +18,10 @@ class Minyan(models.Model):
 
     def get_gabbai_username(self):
         return self.user.username
-'''
-class MinyanForm(ModelForm):
-    class Meta:
-        model = Minyan
-        fields = ['name']
-'''
+
 class Davening_Group(models.Model):
     title = models.CharField(max_length=200)
-    email = models.EmailField(max_length=254)
-    minyan = models.ForeignKey('Davening')
+    minyan = models.ForeignKey(Minyan)
 
     def __str__(self):
         return u'%s' % self.title
