@@ -19,7 +19,7 @@
     <ul>
         <li><a href="{% url 'minyan_mailer:index' %}">home</a></li>
         {% if user.is_authenticated %}
-            <li><a href="{% url 'minyan_mailer:gabbai_home' %}">My Minyanim</a></li>
+            <li><a href="{% url 'minyan_mailer:user_profile' %}">My Account</a></li>
             <li><a href="/logout/">logout</a></li>
         {% else %}
             <li><a href="/login/">login</a></li>

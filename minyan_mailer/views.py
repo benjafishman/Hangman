@@ -69,7 +69,7 @@ def minyan_register(request):
         if minyan_form.is_valid() and gabbai:
             minyan_name = minyan_form.cleaned_data['name']
             minyan = Minyan.objects.create(name=minyan_name, user=gabbai)
-            return HttpResponseRedirect(reverse('minyan_mailer:gabbai_home'))
+            return HttpResponseRedirect(reverse('minyan_mailer:user_profile'))
 
     return render(request, 'minyan_mailer/register.html', {'gabbai_form': gabbai_form,
         'form': minyan_form,
@@ -77,11 +77,11 @@ def minyan_register(request):
 
 
 @login_required
-def gabbai_home(request):
+def user_profile(request):
     # get all minyans associated with this user
     minyans = Minyan.objects.filter(user=request.user)
 
-    return render(request, 'minyan_mailer/gabbai_home.html', {'minyans': minyans})
+    return render(request, 'minyan_mailer/user_profile.html', {'minyans': minyans})
 
 def minyan_detail(request, minyan_id):
     minyan = Minyan.objects.get(pk=minyan_id)

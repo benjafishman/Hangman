@@ -130,5 +130,5 @@ STATICFILES_DIRS = (
     (os.path.join(BASE_DIR, '../hangman/static')),
 )
 
-LOGIN_REDIRECT_URL = '/minyan_mailer/gabbai'
-LOGIN_URL='/login/'
+LOGIN_REDIRECT_URL = '/minyan_mailer/user/profile'
+#LOGIN_URL='/login/'

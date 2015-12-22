@@ -15,9 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.contrib.auth.views import login, logout
 
 urlpatterns = [
     url(r'^$', 'home.views.index'),
+
+    # Login paths
+    url(r'^accounts/login/$', login),
+    url(r'^accounts/logout/$', logout),
+    url(r'^accounts/register/$', 'home.views.register'),
+
     url(r'^hangman/', include('hangman.urls', namespace="hangman")),
     url(r'^blog/', include('blog.urls', namespace="blog")),
     url(r'^minyan_mailer/', include('minyan_mailer.urls', namespace="minyan_mailer")),
