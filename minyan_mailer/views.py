@@ -9,11 +9,15 @@ from django.contrib.auth.decorators import login_required
 
 from minyan_mailer.models import Minyan, Davening, Member
 from minyan_mailer.forms import MinyanForm, UserForm, User, DaveningForm
+
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 # Create your views here.
 
 
 def index(request):
     return render(request, 'minyan_mailer/index.html')
+
 
 @login_required
 def minyan_create(request):
@@ -30,13 +34,18 @@ def minyan_create(request):
             # Create the Minyan
             minyan = Minyan.objects.create(name=minyan_name, gabbai=member, contact_email=minyan_email)
 
-            # Add new minyan to users set of minyans
+            # Add permissions to member for this minyan
+            content_type = ContentType.objects.get_for_model(Minyan)
+
+            permission = Permission.objects.create(codename='can_publish',
+                                       name='Can Publish Posts',
+                                       content_type=content_type)  # Add new minyan to users set of minyans
             member.minyans.add(minyan)
             return HttpResponseRedirect(reverse('minyan_mailer:user_profile'))
 
     return render(request, 'minyan_mailer/minyan_create.html', {
-        'form': minyan_form,
-    })
+    'form': minyan_form,
+})
 
 
 @login_required
@@ -53,14 +62,22 @@ def user_profile(request):
 
     return render(request, 'minyan_mailer/user_profile.html', {'minyans': minyans})
 
+
 def minyan_profile(request, minyan_id):
     minyan = Minyan.objects.get(pk=minyan_id)
     print('here')
     davenings = minyan.davening_set.all()
 
-    print(davenings)
 
-    return render(request, 'minyan_mailer/minyan_profile.html', {'davenings':davenings, 'minyan':minyan})
+    is_gabbai = False
+
+    if request.user.is_authenticated():
+        member = Member.objects.get(user=request.user)
+        is_gabbai = member.is_gabbai(minyan)
+
+    print(is_gabbai)
+
+    return render(request, 'minyan_mailer/minyan_profile.html', {'davenings': davenings, 'minyan': minyan, 'is_gabbai': is_gabbai})
 
 
 @login_required
@@ -88,8 +105,9 @@ def new_davening(request, minyan_id):
         'form': form,
     })
 
+
 def davening_detail(request, davening_id):
     davening = Davening.objects.get(pk=davening_id)
     print(davening)
-    return render(request, 'minyan_mailer/davening_detail.html', {'davening':davening})
+    return render(request, 'minyan_mailer/davening_detail.html', {'davening': davening})
 

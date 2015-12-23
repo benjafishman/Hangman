@@ -34,8 +34,9 @@
         </tbody>
     </table>
 
-    {% if user.is_authenticated %}
+    {% if is_gabbai %}
         {# TODO: check for authentication and if is gabbai #}
+        <p>YOU DA GABBAI</p>
         <a href="{% url 'minyan_mailer:new_davening' minyan.id %}">New Davening</a>
     {% endif %}
 
