@@ -1,11 +1,13 @@
 from django.contrib import admin
 
 # Register your models here.
-from minyan_mailer.models import Minyan, Davening, Davening_Group
+from minyan_mailer.models import Minyan, Davening, Davening_Group, Member
 
+class MemberAdmin(admin.ModelAdmin):
+    list_display = ['user']
 
 class MinyanAdmin(admin.ModelAdmin):
-    list_display = ['name', 'user','created']
+    list_display = ['name','created']
 
 class Davening_GroupInline(admin.TabularInline):
     model = Davening_Group
@@ -18,7 +20,7 @@ class DaveningAdmin(admin.ModelAdmin):
 class Davening_GroupAdmin(admin.ModelAdmin):
     list_display = ['title']
 
-
+admin.site.register(Member, MemberAdmin)
 admin.site.register(Minyan, MinyanAdmin)
 admin.site.register(Davening, DaveningAdmin)
 admin.site.register(Davening_Group, Davening_GroupAdmin)

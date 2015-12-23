@@ -11,7 +11,10 @@
 {% endblock header %}
 
 {% block content %}
+
     <div id="hangman-start-button">
+    <p>Returning User: <a href="/accounts/login">Login Here</a></p>
+    <p>New User: <a href="/accounts/register">Register Here</a></p>
     <form action="{% url 'hangman:index' %}" class="inline">
         <input class="btn btn-default" id="submit-button" type="submit" value="Play"/>
     </form>

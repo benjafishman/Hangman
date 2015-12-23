@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 #from home.forms import UserForm, User
 from home.forms import UserCreateForm
+from minyan_mailer.models import Member
 # Create your views here.
 
 def index(request):
@@ -21,10 +22,11 @@ def register(request):
             username = request.POST['username']
             password = request.POST['password1']
             #authenticate user then login
+
             user = authenticate(username=username, password=password)
 
             login(request, user)
-
+            member = Member.objects.create(user=user)
             return HttpResponseRedirect(reverse('minyan_mailer:index'))
     else:
         form = UserCreateForm()

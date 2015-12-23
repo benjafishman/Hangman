@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 
-from minyan_mailer.models import Minyan, Davening
+from minyan_mailer.models import Minyan, Davening, Member
 from minyan_mailer.forms import MinyanForm, UserForm, User, DaveningForm
 # Create your views here.
 
@@ -78,8 +78,13 @@ def minyan_register(request):
 
 @login_required
 def user_profile(request):
+    print(request.user)
     # get all minyans associated with this user
-    minyans = Minyan.objects.filter(user=request.user)
+    member = Member.objects.get(user=request.user)
+
+    print(member)
+
+    minyans = Minyan.objects.filter(user=member)
 
     return render(request, 'minyan_mailer/user_profile.html', {'minyans': minyans})
 
