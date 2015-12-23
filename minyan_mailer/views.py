@@ -13,65 +13,28 @@ from minyan_mailer.forms import MinyanForm, UserForm, User, DaveningForm
 
 
 def index(request):
-    print(request)
+    return render(request, 'minyan_mailer/index.html')
+
+@login_required
+def minyan_create(request):
     if request.method == 'GET':
-        form = MinyanForm()
-    else:
-        form = MinyanForm(request.POST)
-        # If data is valid, proceeds to create a new post and redirect the user
-        if form.is_valid():
-            minyan_name = form.cleaned_data['name']
-            minyan = Minyan.objects.create(name=minyan_name)
-            return render(request, 'minyan_mailer/register.html', {'minyan': minyan})
-
-    return render(request, 'minyan_mailer/index.html', {
-        'form': form,
-    })
-
-def minyan_register(request):
-    if request.method == 'GET':
-        # add form to register new user/gabbai
-        if not request.user.is_authenticated():
-            gabbai_form = UserForm()
-        else:
-            gabbai_form = None
-
         minyan_form = MinyanForm()
     else:
-        # If there is no user we will show the gabbai/new user form
-        # so they create a user associated with the minyan
-        if not request.user.is_authenticated():
-            gabbai_form = UserForm(request.POST)
-            if gabbai_form.is_valid():
-                # get user input from form and validate it
-                gabbai_username = gabbai_form.cleaned_data['username']
-                gabbai_email = gabbai_form.cleaned_data['email']
-                gabbai_pass = gabbai_form.cleaned_data['password']
-
-                # create new user model
-                new_gabbai = User.objects.create_user(username=gabbai_username, email=gabbai_email, password=gabbai_pass)
-                gabbai_group = Group.objects.get(name='Gabbai')
-                gabbai_group.user_set.add(new_gabbai)
-
-                # authenitcate/log user in
-                new_gabbai = authenticate(username=gabbai_username, password=gabbai_pass)
-                gabbai = new_gabbai
-                login(request, gabbai)
-        else:
-            # A user already logged in
-            gabbai=request.user
-            #print(gabbai.username)
-
-        # the minyan form will always be displayed
         minyan_form = MinyanForm(request.POST)
-
+        member = Member.objects.get(user=request.user)
         # If data is valid, proceeds to create a new minyan and redirect the user
-        if minyan_form.is_valid() and gabbai:
+        if minyan_form.is_valid():
             minyan_name = minyan_form.cleaned_data['name']
-            minyan = Minyan.objects.create(name=minyan_name, user=gabbai)
+            minyan_email = minyan_form.cleaned_data['contact_email']
+
+            # Create the Minyan
+            minyan = Minyan.objects.create(name=minyan_name, gabbai=member, contact_email=minyan_email)
+
+            # Add new minyan to users set of minyans
+            member.minyans.add(minyan)
             return HttpResponseRedirect(reverse('minyan_mailer:user_profile'))
 
-    return render(request, 'minyan_mailer/register.html', {'gabbai_form': gabbai_form,
+    return render(request, 'minyan_mailer/minyan_create.html', {
         'form': minyan_form,
     })
 
@@ -84,18 +47,20 @@ def user_profile(request):
 
     print(member)
 
-    minyans = Minyan.objects.filter(user=member)
+    minyans = member.minyans.all()
+
+    print(minyans)
 
     return render(request, 'minyan_mailer/user_profile.html', {'minyans': minyans})
 
-def minyan_detail(request, minyan_id):
+def minyan_profile(request, minyan_id):
     minyan = Minyan.objects.get(pk=minyan_id)
     print('here')
     davenings = minyan.davening_set.all()
 
     print(davenings)
 
-    return render(request, 'minyan_mailer/minyan_detail.html', {'davenings':davenings, 'minyan':minyan})
+    return render(request, 'minyan_mailer/minyan_profile.html', {'davenings':davenings, 'minyan':minyan})
 
 
 @login_required

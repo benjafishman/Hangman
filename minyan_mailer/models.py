@@ -8,7 +8,8 @@ from django.contrib.auth.models import User
 class Minyan(models.Model):
     name = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey('Member')
+    gabbai = models.ForeignKey('Member')
+    contact_email = models.EmailField(max_length=254, default=None)
 
     class Meta:
         ordering = ['-name']
@@ -17,7 +18,10 @@ class Minyan(models.Model):
         return u'%s' % self.name
 
     def get_gabbai_username(self):
-        return self.user.username
+        return self.gabbai.username
+
+    def get_contact_email(self):
+        return self.contact_email
 
 class Davening_Group(models.Model):
     title = models.CharField(max_length=200)
@@ -59,10 +63,17 @@ class Davening(models.Model):
 
 class Member(models.Model):
     user = models.OneToOneField(User)
-    is_gabbai = models.BooleanField(default=False)
     davening_groups = models.ManyToManyField(Davening_Group, null=True, blank=True)
     minyans = models.ManyToManyField(Minyan, null=True, blank=True)
+
     def __str__(self):
         return u'%s' % self.user.username
+
+    def is_gabbai(self,m):
+        return (m.gabbai.user.username == self.user.username)
+
+
+
+
     class Meta:
         ordering = ['-user']

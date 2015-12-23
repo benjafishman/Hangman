@@ -7,7 +7,7 @@ class MemberAdmin(admin.ModelAdmin):
     list_display = ['user']
 
 class MinyanAdmin(admin.ModelAdmin):
-    list_display = ['name','created']
+    list_display = ['name','created', 'gabbai']
 
 class Davening_GroupInline(admin.TabularInline):
     model = Davening_Group

@@ -4,7 +4,6 @@
     <h1>Register Minyan</h1>
     <form action="#" method="post">
         {% csrf_token %}
-        {{ gabbai_form.as_p }}
         {{ form.as_p }}
         <input type="submit" value="Submit"/>
 {% endblock content %}

@@ -2,7 +2,7 @@
 {% block page-title %}Account{% endblock %}
 {% block content %}
     <h1>Hello {{ user.username }}</h1>
-    <p>Here are your current minyans:</p>
+    <h2>Your Current Minyans:</h2>
     <table class="table table-striped table-bordered">
         <thead>
         <tr>
@@ -15,7 +15,7 @@
             {% for m in minyans %}
                 <tr>
                     <td>
-                        <a href="{% url 'minyan_mailer:minyan_detail' m.id %}">{{ m.name }}</a>
+                        <a href="{% url 'minyan_mailer:minyan_profile' m.id %}">{{ m.name }}</a>
                     </td>
                     <td>{{ m.created|date:'Y-m-d' }}</td>
                 </tr>
@@ -27,5 +27,5 @@
         {% endif %}
         </tbody>
     </table>
-    <a href="{% url 'minyan_mailer:minyan_register' %}">Register</a>
+    <a href="{% url 'minyan_mailer:minyan_create' %}">Register</a>
 {% endblock content %}

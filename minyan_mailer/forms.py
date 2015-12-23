@@ -13,7 +13,7 @@ class UserForm(ModelForm):
 class MinyanForm(ModelForm):
     class Meta:
         model = Minyan
-        fields = ['name']
+        fields = ['name','contact_email']
         labels = {
             'name': _('Minyan Name'),
         }
