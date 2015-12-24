@@ -20,7 +20,7 @@
                 <tr>
                     <td>
 
-                        <a href="{% url 'minyan_mailer:davening_detail' d.id %}">{{ d.title }}</a>
+                        <a href="{% url 'minyan_mailer:davening_profile' d.id %}">{{ d.title }}</a>
                     </td>
                     <td>{{ d.day_of_week|get_weekday_string|title }}</td>
                     <td>{{ d.davening_time|time }}</td>
@@ -37,7 +37,7 @@
     {% if is_gabbai %}
         {# TODO: check for authentication and if is gabbai #}
         <p>YOU DA GABBAI</p>
-        <a href="{% url 'minyan_mailer:new_davening' minyan.id %}">New Davening</a>
+        <a href="{% url 'minyan_mailer:davening_create' minyan.id %}">Create Davening</a>
     {% endif %}
 
     <div>

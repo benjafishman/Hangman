@@ -52,7 +52,7 @@ class Davening(models.Model):
 
     davening_time = models.TimeField(blank=True)
 
-    group = models.ForeignKey(Davening_Group, on_delete=models.CASCADE, blank=True, null=True)
+    davening_groups = models.ManyToManyField(Davening_Group, null=True, blank=True)
 
     class Meta:
         ordering = ['-title']
@@ -70,7 +70,7 @@ class Member(models.Model):
         return u'%s' % self.user.username
 
     def is_gabbai(self,m):
-        return (m.gabbai.user.username == self.user.username)
+        return (m.gabbai.user == self.user)
 
 
 

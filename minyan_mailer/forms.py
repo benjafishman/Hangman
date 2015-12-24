@@ -22,4 +22,4 @@ class MinyanForm(ModelForm):
 class DaveningForm(ModelForm):
     class Meta:
         model = Davening
-        fields = ['title', 'day_of_week','davening_time', 'group']
+        fields = ['title', 'day_of_week','davening_time']

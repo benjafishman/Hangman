@@ -10,6 +10,10 @@
         <tbody>
         {% if davening %}
             <tr>
+                <td>Minyan</td>
+                <td>{{ davening.minyan.name|title }}</td>
+            </tr>
+            <tr>
                 <td>Title</td>
                 <td>{{ davening.title }}</td>
             </tr>
@@ -18,15 +22,7 @@
                 <td>{{ davening.day_of_week|get_weekday_string|title }}</td>
             </tr>
             <tr>
-                <td>Title</td>
-                <td>{{ davening.davening_time|time }}</td>
-            </tr>
-            <tr>
-                <td>Minyan</td>
-                <td>{{ davening.minyan.name|title }}</td>
-            </tr>
-            <tr>
-                <td>Time</td>
+                <td>Davening Time</td>
                 <td>{{ davening.davening_time|time }}</td>
             </tr>
             <tr>

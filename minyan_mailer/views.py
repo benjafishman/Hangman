@@ -12,11 +12,26 @@ from minyan_mailer.forms import MinyanForm, UserForm, User, DaveningForm
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
+from django.http import HttpResponseForbidden
 # Create your views here.
 
 
 def index(request):
     return render(request, 'minyan_mailer/index.html')
+
+@login_required
+def user_profile(request):
+    print(request.user)
+    # get all minyans associated with this user
+    member = Member.objects.get(user=request.user)
+
+    print(member)
+
+    minyans = member.minyans.all()
+
+    print(minyans)
+
+    return render(request, 'minyan_mailer/user_profile.html', {'minyans': minyans})
 
 
 @login_required
@@ -39,29 +54,15 @@ def minyan_create(request):
 
             permission = Permission.objects.create(codename='can_publish',
                                        name='Can Publish Posts',
-                                       content_type=content_type)  # Add new minyan to users set of minyans
+                                       content_type=content_type)
+
+            # Add new minyan to users set of minyans
             member.minyans.add(minyan)
             return HttpResponseRedirect(reverse('minyan_mailer:user_profile'))
 
     return render(request, 'minyan_mailer/minyan_create.html', {
     'form': minyan_form,
 })
-
-
-@login_required
-def user_profile(request):
-    print(request.user)
-    # get all minyans associated with this user
-    member = Member.objects.get(user=request.user)
-
-    print(member)
-
-    minyans = member.minyans.all()
-
-    print(minyans)
-
-    return render(request, 'minyan_mailer/user_profile.html', {'minyans': minyans})
-
 
 def minyan_profile(request, minyan_id):
     minyan = Minyan.objects.get(pk=minyan_id)
@@ -81,33 +82,39 @@ def minyan_profile(request, minyan_id):
 
 
 @login_required
-def new_davening(request, minyan_id):
-    if request.method == 'GET':
-        form = DaveningForm()
+def davening_create(request, minyan_id):
+    # if the user is not the gabbai of the specific minyan
+    # then they can not create any davening
+    member = Member.objects.get(user=request.user)
+    minyan = get_object_or_404(Minyan, pk=minyan_id)
+    if member.is_gabbai(minyan):
+        if request.method == 'GET':
+            form = DaveningForm()
+        else:
+
+            form = DaveningForm(request.POST)
+            # If data is valid, proceeds to create a new post and redirect the user
+            if form.is_valid():
+                davening_title = form.cleaned_data['title']
+                davening_day_of_week = form.cleaned_data['day_of_week']
+                davening_time = form.cleaned_data['davening_time']
+                davening = Davening.objects.create(title=davening_title,
+                                                   minyan=minyan,
+                                                   davening_time=davening_time,
+                                                   day_of_week=davening_day_of_week,
+                )
+
+                return HttpResponseRedirect(reverse('minyan_mailer:davening'))
+
+        return render(request, 'minyan_mailer/davening_create.html', {
+            'form': form,
+        })
     else:
-        davening_minyan = get_object_or_404(Minyan, pk=minyan_id)
-        form = DaveningForm(request.POST)
-        # If data is valid, proceeds to create a new post and redirect the user
-        if form.is_valid():
-            davening_title = form.cleaned_data['title']
-            davening_day_of_week = form.cleaned_data['day_of_week']
-            davening_time = form.cleaned_data['davening_time']
-            davening_group = form.cleaned_data['group']
-            davening = Davening.objects.create(title=davening_title,
-                                               minyan=davening_minyan,
-                                               davening_time=davening_time,
-                                               day_of_week=davening_day_of_week,
-                                               group=davening_group,
-            )
-            return HttpResponseRedirect(reverse('minyan_mailer:davening'))
-
-    return render(request, 'minyan_mailer/new_davening.html', {
-        'form': form,
-    })
+        return HttpResponseForbidden()
 
 
-def davening_detail(request, davening_id):
+def davening_profile(request, davening_id):
     davening = Davening.objects.get(pk=davening_id)
     print(davening)
-    return render(request, 'minyan_mailer/davening_detail.html', {'davening': davening})
+    return render(request, 'minyan_mailer/davening_profile.html', {'davening': davening})
 

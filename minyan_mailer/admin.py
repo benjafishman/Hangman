@@ -14,8 +14,7 @@ class Davening_GroupInline(admin.TabularInline):
     extra = 3
 
 class DaveningAdmin(admin.ModelAdmin):
-    list_display = ['title', 'day_of_week', 'davening_time']
-    #inlines = [Davening_GroupInline]
+    list_display = ['title', 'day_of_week', 'davening_time', 'minyan']
 
 class Davening_GroupAdmin(admin.ModelAdmin):
     list_display = ['title']

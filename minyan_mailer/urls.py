@@ -6,7 +6,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    # Minyan urls: public
+    # Minyan urls:
     url(r'^minyan/create/$', views.minyan_create, name='minyan_create'),
     url(r'^minyan/profile/(?P<minyan_id>[0-9]+)/$', views.minyan_profile, name='minyan_profile'),
 
@@ -15,6 +15,9 @@ urlpatterns = [
 
 
     url(r'^user/profile/$', views.user_profile, name='user_profile'),
-    url(r'^new_davening/(?P<minyan_id>[0-9]+)/$', views.new_davening, name='new_davening'),
-    url(r'^davening/(?P<davening_id>[0-9]+)/$', views.davening_detail, name='davening_detail'),
+
+    # Davening urls:
+    ###  Only minyan gabbai access
+    url(r'^/minyan/davening/create/(?P<minyan_id>[0-9]+)/$', views.davening_create, name='davening_create'),
+    url(r'^/minyan/davening/profile/(?P<davening_id>[0-9]+)/$', views.davening_profile, name='davening_profile'),
 ]
