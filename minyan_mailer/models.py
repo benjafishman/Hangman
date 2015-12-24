@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-
 class Minyan(models.Model):
     name = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
@@ -72,8 +71,13 @@ class Member(models.Model):
     def is_gabbai(self,m):
         return (m.gabbai.user == self.user)
 
-
-
-
     class Meta:
         ordering = ['-user']
+
+class Mailing(models.Model):
+    email = models.EmailField(max_length=254)
+    davening_group = models.ForeignKey(Davening_Group)
+    member = models.ForeignKey(Member, null=True)
+
+    def __str__(self):
+        return u'%s' % self.email + ',' + self.davening_group.title

@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 
-from minyan_mailer.models import Minyan, Davening, Member
+from minyan_mailer.models import Minyan, Davening, Member, Davening_Group
 from minyan_mailer.forms import MinyanForm, UserForm, User, DaveningForm
 
 from django.contrib.auth.models import Permission
@@ -103,8 +103,9 @@ def davening_create(request, minyan_id):
                                                    davening_time=davening_time,
                                                    day_of_week=davening_day_of_week,
                 )
-
-                return HttpResponseRedirect(reverse('minyan_mailer:davening'))
+                davening_group = Davening_Group.objects.create(title=davening_title,minyan=minyan)
+                davening_group.save()
+                return HttpResponseRedirect(reverse('minyan_mailer:davening_profile', args=(davening.id,)))
 
         return render(request, 'minyan_mailer/davening_create.html', {
             'form': form,
