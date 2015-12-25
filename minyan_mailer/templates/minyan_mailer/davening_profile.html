@@ -33,6 +33,15 @@
                     <td>None</td>
                 {% endif %}
             </tr>
+            <td>
+                        <form action="#" method="post">
+                            {% csrf_token %}
+
+                                {{ sign_up_form.as_p }}
+                            <input type="hidden" name="davening_id" value="{{ d.id }}" />
+                            <input type="submit" value="Submit"/>
+                        </form>
+                    </td>
         {% else %}
             <tr>
                 <td>No Davening</td>

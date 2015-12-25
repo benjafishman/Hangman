@@ -17,7 +17,7 @@ class DaveningAdmin(admin.ModelAdmin):
     list_display = ['title', 'day_of_week', 'davening_time', 'minyan']
 
 class Davening_GroupAdmin(admin.ModelAdmin):
-    list_display = ['title']
+    list_display = ['title', 'minyan']
 
 class MailingAdmin(admin.ModelAdmin):
     list_display = ['davening_group','email']
