@@ -98,6 +98,13 @@ DATABASES = {
  }
 }
 
+#MailGun Vars
+
+MAILGUN_BASE_URL = os.environ.get("MAILGUN_BASE_URL")
+MAILGUN_DOMAIN = os.environ.get("MAILGUN_DOMAIN")
+MAILGUN_AUTH_KEY = os.environ.get("MAILGUN_AUTH_KEY")
+MAILGUN_FROM_ADDRESS = os.environ.get("MAILGUN_FROM_ADDRESS")
+
 #sessions
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"

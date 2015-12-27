@@ -14,7 +14,7 @@
                 <td>{{ davening.minyan.name|title }}</td>
             </tr>
             <tr>
-                <td>Title</td>
+                <td>Davening</td>
                 <td>{{ davening.title }}</td>
             </tr>
             <tr>
@@ -26,16 +26,10 @@
                 <td>{{ davening.davening_time|time }}</td>
             </tr>
             <tr>
-                <td>Email Group</td>
-                {% if davening.davening_groups %}
+                <td>Davening Group</td>
                     <td>
-                    {% for group in davening.davening_groups.all %}
-                        {{ group.title|title }},
-                    {% endfor %}
+                        {{ davening.primary_davening_group | title  }}
                     </td>
-                {% else %}
-                    <td>None</td>
-                {% endif %}
             </tr>
             <td>
                         <form action="#" method="post">
@@ -53,4 +47,10 @@
         {% endif %}
         </tbody>
     </table>
+
+    {% if is_gabbai %}
+        {# TODO: check for authentication and if is gabbai #}
+        <p>YOU DA GABBAI</p>
+        <a href="{% url 'minyan_mailer:davening_create' davening.minyan.id %}">Create Davening</a>
+    {% endif %}
 {% endblock content %}

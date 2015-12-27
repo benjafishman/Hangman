@@ -18,27 +18,6 @@ class MinyanForm(ModelForm):
             'name': _('Minyan Name'),
         }
 
-class MultiDayField(forms.Field):
-    # normalize string input to list
-    def to_python(self, value):
-            "Normalize data to a list of strings."
-
-            # Return an empty list if no input was given.
-            if not value:
-                return []
-            return value.split(',')
-
-    def validate(self, value):
-
-        if not value:
-            raise forms.ValidationError("Days Can Not Be Empty")
-        for day in value:
-            if len(day) > 1:
-                raise forms.ValidationError("Days can only be one charachter long")
-            if int(day) < 0 or int(day) > 6:
-                raise forms.ValidationError("Must be greater >= 0 and <= 6")
-
-
 class DaveningForm(ModelForm):
     CHOICES=[('0','Sunday'),
          ('1','Monday'),
@@ -52,7 +31,13 @@ class DaveningForm(ModelForm):
                                              choices=CHOICES)
     class Meta:
         model = Davening
-        fields = ['title','days','davening_time']
+        fields = ['title','days','davening_time', 'email_time']
+        abels = {
+        'email_time': _('Email'),
+        }
+        help_texts = {
+            'email_time': _('Set the number of hours before the davening you want to send an email.'),
+        }
 
 class UnauthenticatedDaveningSignUpForm(forms.Form):
     email = forms.EmailField()

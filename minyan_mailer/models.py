@@ -3,6 +3,8 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 
+from minyan_mailer.api_wrappers.MailGunWrapper import MailGunWrapper
+
 # Create your models here.
 
 class Minyan(models.Model):
@@ -26,6 +28,7 @@ class Minyan(models.Model):
 class Davening_Group(models.Model):
     title = models.CharField(max_length=200)
     minyan = models.ForeignKey(Minyan)
+    mailing_list_title = models.CharField(max_length=300)
 
     def __str__(self):
         return u'%s' % self.title
@@ -48,19 +51,26 @@ class Davening(models.Model):
 
     minyan = models.ForeignKey(Minyan, on_delete=models.CASCADE)
 
-    #day_of_week = models.IntegerField(choices=WEEKDAYS)
-
     davening_time = models.TimeField(blank=True)
 
-    davening_groups = models.ManyToManyField(Davening_Group, null=True, blank=True)
+    # davening_groups = models.ManyToManyField(Davening_Group, null=True, blank=True)
+
+    primary_davening_group = models.ForeignKey(Davening_Group, null=True)
 
     days = ArrayField(models.CharField(max_length=1))
+    # email_time will be the x amount of time before davenig to send an email
+    # so if the value stored is 1. that means an email will be sent out 1 hour before davening
+    email_time = models.FloatField(default=0)
 
     class Meta:
         ordering = ['-title']
 
     def __str__(self):
         return u'%s' % self.title
+
+    def send_pre_davening_email(self):
+        MG = MailGunWrapper()
+
 
 class Member(models.Model):
     user = models.OneToOneField(User)

@@ -13,6 +13,10 @@ from minyan_mailer.forms import MinyanForm, UserForm, User, DaveningForm, Unauth
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseForbidden
+
+from minyan_mailer.api_wrappers.MailGunWrapper import MailGunWrapper
+
+
 # Create your views here.
 
 
@@ -95,17 +99,33 @@ def davening_create(request, minyan_id):
                 davening_title = form.cleaned_data['title']
                 davening_time = form.cleaned_data['davening_time']
                 davening_days = form.cleaned_data['days']
+                davening_email_time = form.cleaned_data['email_time']
                 print(davening_days)
+
+                # Create the davening group real quick
+                davening_group_title = davening_title.replace(" ", "_") + '_davening_group'
+                davening_group = Davening_Group.objects.create(title=davening_group_title, minyan=minyan, mailing_list_title=davening_group_title)
+                davening_group.save()
+                # add the davening group to the davening
+
+
+
                 davening = Davening.objects.create(title=davening_title,
                                                    minyan=minyan,
                                                    davening_time=davening_time,
                                                    days=davening_days,
+                                                   email_time = davening_email_time,
+                                                   primary_davening_group=davening_group,
                 )
-                davening_group_title = davening_title.replace(" ", "_") + '_davening_group'
-                davening_group = Davening_Group.objects.create(title=davening_group_title, minyan=minyan)
-                davening_group.save()
-                # add the davening group to the davening
-                davening.davening_groups.add(davening_group)
+
+                #davening.primary_davening_group.add(davening_group)
+
+                # we also will create a mailgun related lsit for this davening group
+                MailGun = MailGunWrapper()
+                mailgun_request = MailGun.create_mailing_list(davening_group_title)
+
+                print(mailgun_request)
+
                 return HttpResponseRedirect(reverse('minyan_mailer:davening_profile', args=(davening.id,)))
 
         return render(request, 'minyan_mailer/davening_create.html', {
@@ -122,6 +142,12 @@ def davening_profile(request, davening_id):
 
     davening = Davening.objects.get(pk=davening_id)
 
+    is_gabbai = False
+
+    if request.user.is_authenticated():
+        member = Member.objects.get(user=request.user)
+        is_gabbai = member.is_gabbai(davening.minyan)
+
     print(davening.days)
 
     if request.method == 'GET':
@@ -132,14 +158,20 @@ def davening_profile(request, davening_id):
             # grab input
             # create mailing object with email data
             # set davening_group to group associated with the current davening
+            # add the email to the mailgun mailing list
             email = unauthenticated_user_form.cleaned_data['email']
             print(email)
             print(davening.id)
-            davening_group = Davening_Group.objects.get(title=davening.title+'_davening_group')
+            davening_group = Davening_Group.objects.get(title=davening.title.replace(" ", "_")+'_davening_group')
             print(davening_group)
             mailing = Mailing.objects.create(email=email,davening_group=davening_group)
-            return HttpResponseRedirect(reverse('minyan_mailer:davening_profile', args=(davening.id,)))
+
+            # send user info to MailGun List
+            MG = MailGunWrapper()
+            mailgun_request = MG.add_list_member(davening_group.title,email)
+            print(mailgun_request)
+            return HttpResponseRedirect(reverse('minyan_mailer:davening_profile', args=(davening.id,)) + '?submit=true')
 
 
     print(davening)
-    return render(request, 'minyan_mailer/davening_profile.html', {'davening': davening, 'sign_up_form': unauthenticated_user_form,})
+    return render(request, 'minyan_mailer/davening_profile.html', {'davening': davening, 'sign_up_form': unauthenticated_user_form, 'is_gabbai': is_gabbai})
