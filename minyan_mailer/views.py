@@ -52,7 +52,7 @@ def minyan_create(request):
 
             # Add permissions to member for this minyan
             content_type = ContentType.objects.get_for_model(Minyan)
-            
+
             # Add new minyan to users set of minyans
             member.minyans.add(minyan)
             return HttpResponseRedirect(reverse('minyan_mailer:user_profile'))
@@ -93,14 +93,15 @@ def davening_create(request, minyan_id):
             # If data is valid, proceeds to create a new post and redirect the user
             if form.is_valid():
                 davening_title = form.cleaned_data['title']
-                davening_day_of_week = form.cleaned_data['day_of_week']
                 davening_time = form.cleaned_data['davening_time']
+                davening_days = form.cleaned_data['days']
+                print(davening_days)
                 davening = Davening.objects.create(title=davening_title,
                                                    minyan=minyan,
                                                    davening_time=davening_time,
-                                                   day_of_week=davening_day_of_week,
+                                                   days=davening_days,
                 )
-                davening_group_title = davening_title+'_davening_group'
+                davening_group_title = davening_title.replace(" ", "_") + '_davening_group'
                 davening_group = Davening_Group.objects.create(title=davening_group_title, minyan=minyan)
                 davening_group.save()
                 # add the davening group to the davening
@@ -118,7 +119,11 @@ def davening_profile(request, davening_id):
     # todo: going to need to types of forms here:
     # ## 1. Authenticated form with radio button and just use user object
     # ## 2. Unauthenticated user form with text input
+
     davening = Davening.objects.get(pk=davening_id)
+
+    print(davening.days)
+
     if request.method == 'GET':
         unauthenticated_user_form = UnauthenticatedDaveningSignUpForm()
     else:

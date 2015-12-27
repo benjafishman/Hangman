@@ -1,6 +1,7 @@
 from django.db import models
 from django.forms import ModelForm
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 
@@ -47,18 +48,19 @@ class Davening(models.Model):
 
     minyan = models.ForeignKey(Minyan, on_delete=models.CASCADE)
 
-    day_of_week = models.IntegerField(choices=WEEKDAYS)
+    #day_of_week = models.IntegerField(choices=WEEKDAYS)
 
     davening_time = models.TimeField(blank=True)
 
     davening_groups = models.ManyToManyField(Davening_Group, null=True, blank=True)
+
+    days = ArrayField(models.CharField(max_length=1))
 
     class Meta:
         ordering = ['-title']
 
     def __str__(self):
         return u'%s' % self.title
-
 
 class Member(models.Model):
     user = models.OneToOneField(User)

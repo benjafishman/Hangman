@@ -19,7 +19,7 @@
             </tr>
             <tr>
                 <td>Weekday</td>
-                <td>{{ davening.day_of_week|get_weekday_string|title }}</td>
+                <td>{{ davening.days }}</td>
             </tr>
             <tr>
                 <td>Davening Time</td>
@@ -27,8 +27,12 @@
             </tr>
             <tr>
                 <td>Email Group</td>
-                {% if davening.group %}
-                    <td>{{ davening.group.title|title }}</td>
+                {% if davening.davening_groups %}
+                    <td>
+                    {% for group in davening.davening_groups.all %}
+                        {{ group.title|title }},
+                    {% endfor %}
+                    </td>
                 {% else %}
                     <td>None</td>
                 {% endif %}

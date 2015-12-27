@@ -14,10 +14,10 @@ class Davening_GroupInline(admin.TabularInline):
     extra = 3
 
 class DaveningAdmin(admin.ModelAdmin):
-    list_display = ['title', 'day_of_week', 'davening_time', 'minyan']
+    list_display = [ 'minyan', 'title', 'days', 'davening_time' ]
 
 class Davening_GroupAdmin(admin.ModelAdmin):
-    list_display = ['title', 'minyan']
+    list_display = ['minyan', 'title']
 
 class MailingAdmin(admin.ModelAdmin):
     list_display = ['davening_group','email']

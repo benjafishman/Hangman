@@ -10,7 +10,7 @@
         <thead>
         <tr>
             <th>Davening</th>
-            <th>Weekday</th>
+            <th>Weekday(s)</th>
             <th>Time</th>
             <!--<th>Sign Up</th>-->
         </tr>
@@ -23,7 +23,7 @@
 
                         <a href="{% url 'minyan_mailer:davening_profile' d.id %}">{{ d.title }}</a>
                     </td>
-                    <td>{{ d.day_of_week|get_weekday_string|title }}</td>
+                    <td>{{ d.days }}</td>
                     <td>{{ d.davening_time|time }}</td>
 
                     <!--<td>
