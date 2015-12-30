@@ -5,6 +5,7 @@ from django.forms import ModelForm
 from minyan_mailer.models import Minyan, Davening
 from django.utils.translation import ugettext_lazy as _
 from django import forms
+from minyan_mailer.widgets import SelectTimeWidget
 class UserForm(ModelForm):
     class Meta:
         model = User
@@ -32,11 +33,16 @@ class DaveningForm(ModelForm):
     class Meta:
         model = Davening
         fields = ['title','days','davening_time', 'email_time']
-        abels = {
-        'email_time': _('Email'),
+        labels = {
+        'email_time': _('Email Send Time'),
         }
         help_texts = {
             'email_time': _('Set the number of hours before the davening you want to send an email.'),
+        }
+        widgets = {
+            'davening_time': SelectTimeWidget(),
+            'email_time': SelectTimeWidget(),
+
         }
 
 class UnauthenticatedDaveningSignUpForm(forms.Form):

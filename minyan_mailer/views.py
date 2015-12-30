@@ -15,6 +15,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseForbidden
 
 from minyan_mailer.api_wrappers.MailGunWrapper import MailGunWrapper
+from minyan_mailer.tasks import add
+
 
 
 # Create your views here.
@@ -170,6 +172,10 @@ def davening_profile(request, davening_id):
             MG = MailGunWrapper()
             mailgun_request = MG.add_list_member(davening_group.title,email)
             print(mailgun_request)
+
+            #add.delay(2, 2)
+
+            #print("scheduled add???")
             return HttpResponseRedirect(reverse('minyan_mailer:davening_profile', args=(davening.id,)) + '?submit=true')
 
 

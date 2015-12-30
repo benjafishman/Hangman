@@ -2,6 +2,8 @@ from django.db import models
 from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
+from djcelery.models import PeriodicTask, IntervalSchedule
+import datetime
 
 from minyan_mailer.api_wrappers.MailGunWrapper import MailGunWrapper
 
@@ -25,6 +27,7 @@ class Minyan(models.Model):
     def get_contact_email(self):
         return self.contact_email
 
+
 class Davening_Group(models.Model):
     title = models.CharField(max_length=200)
     minyan = models.ForeignKey(Minyan)
@@ -36,17 +39,18 @@ class Davening_Group(models.Model):
     class Meta:
         ordering = ['-title']
 
+
 class Davening(models.Model):
     title = models.CharField(max_length=200)
 
     WEEKDAYS = (
-        (0,'Sunday'),
-        (1,'Monday'),
-        (2,'Tuesday'),
-        (3,'Wednesday'),
-        (4,'Thursday'),
-        (5,'Friday'),
-        (6,'Saturday')
+        (0, 'Sunday'),
+        (1, 'Monday'),
+        (2, 'Tuesday'),
+        (3, 'Wednesday'),
+        (4, 'Thursday'),
+        (5, 'Friday'),
+        (6, 'Saturday')
     )
 
     minyan = models.ForeignKey(Minyan, on_delete=models.CASCADE)
@@ -60,7 +64,7 @@ class Davening(models.Model):
     days = ArrayField(models.CharField(max_length=1))
     # email_time will be the x amount of time before davenig to send an email
     # so if the value stored is 1. that means an email will be sent out 1 hour before davening
-    email_time = models.FloatField(default=0)
+    email_time = models.TimeField(blank=True, null=True)
 
     class Meta:
         ordering = ['-title']
@@ -80,11 +84,12 @@ class Member(models.Model):
     def __str__(self):
         return u'%s' % self.user.username
 
-    def is_gabbai(self,m):
+    def is_gabbai(self, m):
         return (m.gabbai.user == self.user)
 
     class Meta:
         ordering = ['-user']
+
 
 class Mailing(models.Model):
     email = models.EmailField(max_length=254)

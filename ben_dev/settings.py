@@ -45,6 +45,8 @@ INSTALLED_APPS = (
     'bootstrap3',
     'jquery',
     'minyan_mailer',
+    'djcelery',
+    'kombu.transport.django',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -139,3 +141,24 @@ STATICFILES_DIRS = (
 
 LOGIN_REDIRECT_URL = '/minyan_mailer/user/profile'
 #LOGIN_URL='/login/'
+
+# Celery settings
+import djcelery
+djcelery.setup_loader()
+BROKER_URL = 'django://'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+
+
+from datetime import timedelta
+'''
+CELERYBEAT_SCHEDULE = {
+    'add-every-30-seconds': {
+        'task': 'minyan_mailer.tasks.add',
+        'schedule': timedelta(seconds=30),
+        'args': (16, 16)
+    },
+}
+'''
+
+
+CELERY_TIMEZONE = 'UTC'
