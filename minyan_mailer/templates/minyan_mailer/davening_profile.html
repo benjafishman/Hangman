@@ -1,9 +1,11 @@
 {% extends 'minyan_mailer/base.html' %}
-
+{% load tz %}
 {% load minyan_mailer_filters %}
 
-{% block page-title %}{{ davening.title }} at {{ davening.minyan.name|title }}{% endblock %}
+{% block page-title %}{{ value|localtime }}{{ davening.title }} at {{ davening.minyan.name|title }}{% endblock %}
 {% block content %}
+
+
     <table class="table table-striped table-bordered">
         <thead>
         </thead>

@@ -1,9 +1,16 @@
 {% extends 'minyan_mailer/base.html' %}
+{% load tz %}
+{% get_current_timezone as TIME_ZONE %}
+
 
 {% load minyan_mailer_filters %}
 
 {% block page-title %}Minyan Profile{% endblock %}
 {% block content %}
+    {% if not TIME_ZONE %}
+        <p>No time zone</p>
+    {% endif %}
+    {{ TIME_ZONE }}
     <h1>The Heilegeh {{ minyan.name | title }} Minyan</h1>
     <h2>Davening Schedule:</h2>
     <table class="table table-striped table-bordered">

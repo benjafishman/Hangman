@@ -21,3 +21,11 @@ def send_test_list_email():
     x = MG.send_simple_message(list_address, subject, message)
     print(x)
 
+
+def send_mail(*kwargs):
+    for key in kwargs:
+        print(key)
+        if key is not 'list_address' or key is not 'subject' or key is not 'message':
+            print('missing key')
+        print(key)
+    return True

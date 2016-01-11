@@ -6,15 +6,19 @@ from minyan_mailer.models import Minyan, Davening
 from django.utils.translation import ugettext_lazy as _
 from django import forms
 from minyan_mailer.widgets import SelectTimeWidget
+from pytz import timezone
+import pytz
+
 class UserForm(ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password']
 
 class MinyanForm(ModelForm):
+    timezone = forms.ChoiceField(choices=[(x, x) for x in pytz.common_timezones])
     class Meta:
         model = Minyan
-        fields = ['name','contact_email']
+        fields = ['name','contact_email', 'timezone']
         labels = {
             'name': _('Minyan Name'),
         }

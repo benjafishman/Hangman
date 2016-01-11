@@ -14,6 +14,7 @@ class Minyan(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     gabbai = models.ForeignKey('Member')
     contact_email = models.EmailField(max_length=254, default=None)
+    timezone = models.CharField(max_length=254, default='US/Eastern')
 
     class Meta:
         ordering = ['-name']
@@ -62,8 +63,7 @@ class Davening(models.Model):
     primary_davening_group = models.ForeignKey(Davening_Group, null=True)
 
     days = ArrayField(models.CharField(max_length=1))
-    # email_time will be the x amount of time before davenig to send an email
-    # so if the value stored is 1. that means an email will be sent out 1 hour before davening
+
     email_time = models.TimeField(blank=True, null=True)
 
     class Meta:
