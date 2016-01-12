@@ -8,16 +8,22 @@
         <tr>
             <th>Minyan</th>
             <th>Created</th>
+            <th>Gabbai</th>
         </tr>
         </thead>
         <tbody>
         {% if minyans %}
-            {% for m in minyans %}
+            {% for m,k in minyans.items %}
                 <tr>
                     <td>
                         <a href="{% url 'minyan_mailer:minyan_profile' m.id %}">{{ m.name }}</a>
                     </td>
                     <td>{{ m.created|date:'Y-m-d' }}</td>
+                    <td>
+                        {% if k == 1 %}
+                            <p>Gabbai</p>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         {% else %}

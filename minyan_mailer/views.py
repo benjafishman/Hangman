@@ -39,9 +39,20 @@ def user_profile(request):
 
     minyans = member.minyans.all()
 
+    # temporary: created a numbered list of minyans
+    # user is gabbai of to display on front end
+    member_minyans = {m:0 for m in minyans}
+    print(member_minyans)
+    for m in minyans:
+        print(m)
+        if member.is_gabbai(m):
+            member_minyans[m] = 1
+
+    print(member_minyans)
+
     print(minyans)
 
-    return render(request, 'minyan_mailer/user_profile.html', {'minyans': minyans})
+    return render(request, 'minyan_mailer/user_profile.html', {'minyans': member_minyans})
 
 
 @login_required

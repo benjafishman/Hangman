@@ -29,6 +29,7 @@ class Minyan(models.Model):
         return self.contact_email
 
 
+
 class Davening_Group(models.Model):
     title = models.CharField(max_length=200)
     minyan = models.ForeignKey(Minyan)
@@ -84,8 +85,12 @@ class Member(models.Model):
     def __str__(self):
         return u'%s' % self.user.username
 
-    def is_gabbai(self, m):
-        return (m.gabbai.user == self.user)
+    def is_gabbai(self, minyan):
+        '''
+        :param minyan: minyan instance object
+        :return: boolean
+        '''
+        return minyan.gabbai.user == self.user
 
     class Meta:
         ordering = ['-user']
