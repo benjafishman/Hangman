@@ -177,6 +177,7 @@ def davening_create(request, minyan_id):
                 ct_days = ','.join(davening_days)
 
                 # We have to increment each day if utc time happens to be in the following day
+                # had to mod 7 for the case of user input of day 6 (saturday) then incremented by one (7) should map to day 0
                 if day_checker(utc_email_time, davening.davening_time):
                     incremented_days = [str((int(x)+1)%7) for x in davening_days]
                     ct_days = ','.join(incremented_days)

@@ -2,7 +2,7 @@ from django.db import models
 from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
-from djcelery.models import PeriodicTask, IntervalSchedule
+from djcelery.models import CrontabSchedule, PeriodicTask
 import datetime
 
 from minyan_mailer.api_wrappers.MailGunWrapper import MailGunWrapper
@@ -67,6 +67,8 @@ class Davening(models.Model):
 
     email_time = models.TimeField(blank=True, null=True)
 
+    periodic_mailing = models.ForeignKey('PeriodicMailing', null=True)
+
     class Meta:
         ordering = ['-title']
 
@@ -94,10 +96,24 @@ class Member(models.Model):
 
     class Meta:
         ordering = ['-user']
-'''
+
 class PeriodicMailing(models.Model):
     email_text = models.TextField(max_length=200)
     enabled = models.BooleanField()
-    davening_group_name = models.ForeignKey(Davening_Group, null=True)
+    # davening_group_name = models.ForeignKey(Davening_Group, null=True)
     mailgun_list_name = models.CharField(max_length=1000)
-'''
+    crontab_string = models.CharField(max_length=50)
+    # does this make sense
+    ### I think just having the ID might make more sense
+    ##### How can update these on the fly
+    # crontab_schedule_id = models.ForeignKey(CrontabSchedule, null=True)
+    crontab_schedule_id = models.CharField(max_length=200)
+    # does this make sense
+    ### I think just having the ID might make more sense
+    ##### How can update these on the fly
+    # periodic_task = models.ForeignKey(PeriodicTask)
+    periodic_task_id = models.CharField(max_length=200)
+    email_send_time = models.TimeField(blank=True, null=True)
+
+    def __str__(self):
+        return u'%s' % self.mailgun_list_name
