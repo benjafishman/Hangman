@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 
-from minyan_mailer.models import Minyan, Davening, Member, Davening_Group, Mailing
+from minyan_mailer.models import Minyan, Davening, Member, Davening_Group
 from minyan_mailer.forms import MinyanForm, UserForm, User, DaveningForm, UnauthenticatedDaveningSignUpForm
 
 from django.contrib.auth.models import Permission
@@ -238,7 +238,6 @@ def davening_profile(request, davening_id):
             # add the email to the mailgun mailing list
             email = unauthenticated_user_form.cleaned_data['email']
             davening_group = Davening_Group.objects.get(title=davening.title.replace(" ", "_")+'_davening_group')
-            mailing = Mailing.objects.create(email=email,davening_group=davening_group)
 
             # send user info to MailGun List
             MG = MailGunWrapper()

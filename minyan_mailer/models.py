@@ -94,12 +94,10 @@ class Member(models.Model):
 
     class Meta:
         ordering = ['-user']
-
-
-class Mailing(models.Model):
-    email = models.EmailField(max_length=254)
-    davening_group = models.ForeignKey(Davening_Group)
-    member = models.ForeignKey(Member, null=True)
-
-    def __str__(self):
-        return u'%s' % self.email + ',' + self.davening_group.title
+'''
+class PeriodicMailing(models.Model):
+    email_text = models.TextField(max_length=200)
+    enabled = models.BooleanField()
+    davening_group_name = models.ForeignKey(Davening_Group, null=True)
+    mailgun_list_name = models.CharField(max_length=1000)
+'''

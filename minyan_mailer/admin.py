@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from minyan_mailer.models import Mailing,Minyan,Davening, Davening_Group, Member
+from minyan_mailer.models import Minyan,Davening, Davening_Group, Member
 from kombu.transport.django import models as kombu_models
 
 class MemberAdmin(admin.ModelAdmin):
@@ -20,13 +20,8 @@ class DaveningAdmin(admin.ModelAdmin):
 class Davening_GroupAdmin(admin.ModelAdmin):
     list_display = ['minyan', 'title', 'mailing_list_title']
 
-class MailingAdmin(admin.ModelAdmin):
-    list_display = ['davening_group','email']
-
-
 admin.site.register(kombu_models.Message)
 admin.site.register(Member, MemberAdmin)
 admin.site.register(Minyan, MinyanAdmin)
 admin.site.register(Davening, DaveningAdmin)
 admin.site.register(Davening_Group, Davening_GroupAdmin)
-admin.site.register(Mailing, MailingAdmin)
