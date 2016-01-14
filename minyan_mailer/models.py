@@ -3,7 +3,8 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 from djcelery.models import CrontabSchedule, PeriodicTask
-import datetime
+from datetime import datetime, date
+import pytz
 
 from minyan_mailer.api_wrappers.MailGunWrapper import MailGunWrapper
 
@@ -27,7 +28,6 @@ class Minyan(models.Model):
 
     def get_contact_email(self):
         return self.contact_email
-
 
 
 class Davening_Group(models.Model):
@@ -65,7 +65,7 @@ class Davening(models.Model):
 
     days = ArrayField(models.CharField(max_length=1))
 
-    email_time = models.TimeField(blank=True, null=True)
+    #email_time = models.TimeField(blank=True, null=True)
 
     periodic_mailing = models.ForeignKey('PeriodicMailing', null=True)
 
@@ -97,14 +97,15 @@ class Member(models.Model):
     class Meta:
         ordering = ['-user']
 
+
 class PeriodicMailing(models.Model):
-    email_text = models.TextField(max_length=200)
+    email_text = models.TextField(blank=True,max_length=200)
     enabled = models.BooleanField()
     # davening_group_name = models.ForeignKey(Davening_Group, null=True)
-    mailgun_list_name = models.CharField(max_length=1000)
-    crontab_string = models.CharField(max_length=50)
+    mailgun_list_name = models.CharField(max_length=1000, blank=True)
+    crontab_string = models.CharField(max_length=50, blank=True)
     # does this make sense
-    ### I think just having the ID might make more sense
+    # ## I think just having the ID might make more sense
     ##### How can update these on the fly
     # crontab_schedule_id = models.ForeignKey(CrontabSchedule, null=True)
     crontab_schedule_id = models.CharField(max_length=200)
