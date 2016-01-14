@@ -21,7 +21,7 @@ class Davening_GroupAdmin(admin.ModelAdmin):
     list_display = ['minyan', 'title', 'mailing_list_title']
 
 class PeriodicMailingAdmin(admin.ModelAdmin):
-    list_display = ['email_text', 'enabled', 'mailgun_list_name', 'crontab_string', 'crontab_schedule_id', 'periodic_task_id', 'email_send_time']
+    list_display = ['email_text', 'enabled', 'mailgun_list_name', 'crontab_schedule_id', 'periodic_task_id', 'email_send_time']
 admin.site.register(PeriodicMailing, PeriodicMailingAdmin)
 
 admin.site.register(kombu_models.Message)

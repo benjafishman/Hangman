@@ -103,7 +103,6 @@ class PeriodicMailing(models.Model):
     enabled = models.BooleanField()
     # davening_group_name = models.ForeignKey(Davening_Group, null=True)
     mailgun_list_name = models.CharField(max_length=1000, blank=True)
-    crontab_string = models.CharField(max_length=50, blank=True)
     # does this make sense
     # ## I think just having the ID might make more sense
     ##### How can update these on the fly

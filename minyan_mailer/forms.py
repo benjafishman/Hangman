@@ -56,11 +56,11 @@ class PeriodicMailingForm(ModelForm):
          ('5','Friday'),
          ('6','Saturday'),]
 
-    days = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+    send_days = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
                                              choices=CHOICES)
     class Meta:
         model = PeriodicMailing
-        fields = ['email_text','days', 'email_send_time','enabled'  ]
+        fields = ['email_text','send_days', 'email_send_time','enabled'  ]
         widgets = {
             'email_send_time': SelectTimeWidget(),
 

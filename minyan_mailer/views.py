@@ -112,7 +112,6 @@ def davening_create(request, minyan_id):
             form = DaveningForm()
             periodic_mailing_form = PeriodicMailingForm()
         else:
-
             form = DaveningForm(request.POST)
             periodic_mailing_form = PeriodicMailingForm(request.POST)
             #periodic_mailing_form = PeriodicMailingForm(request.POST)
@@ -121,7 +120,6 @@ def davening_create(request, minyan_id):
                 davening_title = form.cleaned_data['title']
                 davening_time = form.cleaned_data['davening_time']
                 davening_days = form.cleaned_data['days']
-                #davening_email_time = form.cleaned_data['email_time']
 
                 # Create the davening group real quick
                 davening_group_title = davening_title.replace(" ", "_") + '_davening_group'
@@ -129,10 +127,7 @@ def davening_create(request, minyan_id):
                                                                mailing_list_title=davening_group_title)
                 davening_group.save()
 
-                # add the davening group to the davening
-                print(davening_time)
-                #print(davening_email_time)
-
+                #TODO: add below back at some point
                 davening = Davening.objects.create(title=davening_title,
                                                    minyan=minyan,
                                                    davening_time=davening_time,
@@ -140,70 +135,87 @@ def davening_create(request, minyan_id):
                                                    primary_davening_group=davening_group,
                 )
 
+
+                #TODO: remove de-comment below code when ready
                 #davening.primary_davening_group.add(davening_group)
-
-                # we also will create a mailgun related list for this davening group
-
+                # we also will create a mailgun related list for this davening (group)
                 '''
                 MailGun = MailGunWrapper()
                 mailgun_request = MailGun.create_mailing_list(davening_group_title)
-
                 print(mailgun_request)
                 '''
 
-                '''
-                Need to create or associate a
-                crontab schedule with this minyan
+                # If user has opted to set up a mailing proceed with mailing creation
+                #TODO: Somehow check if user set any of this
+                if periodic_mailing_form.is_valid():
+                    email_text = periodic_mailing_form.cleaned_data['email_text']
+                    print(email_text)
 
-                e.x. of creating a crontab object:
-                ct = CT.objects.create(minute=59,hour=3,day_of_week=3)
-                0. Convert user input to utc
-                1. Create a crontab with time and day:
-                    1a. parse user input of email time
-                    1b: day_of_week(s) flatten list seperated by comma
-                2. get the crontab id
-                3. Create a periodicTask with id of the crontab from above
-                    3a. example of periodicTask is: p = PeriodicTask.objects.create(name='test from shell 1',task='minyan_mailer.tasks.send_test_list_email',crontab_id=7)
+                    send_days = periodic_mailing_form.cleaned_data['send_days']
+                    print(send_days)
+
+                    mailing_send_time = periodic_mailing_form.cleaned_data['email_send_time']
+                    print(mailing_send_time)
+
+                    mailing_enabled = periodic_mailing_form.cleaned_data['enabled']
+                    print(mailing_enabled)
+
+                    '''
+                    Need to create or associate a
+                    crontab schedule with this minyan
+
+                    e.x. of creating a crontab object:
+                    ct = CT.objects.create(minute=59,hour=3,day_of_week=3)
+                    0. Convert user input to utc
+                    1. Create a crontab with time and day:
+                        1a. parse user input of email time
+                        1b: day_of_week(s) flatten list seperated by comma
+                    2. get the crontab id
+                    3. Create a periodicTask with id of the crontab from above
+                        3a. example of periodicTask is: p = PeriodicTask.objects.create(name='test from shell 1',task='minyan_mailer.tasks.send_test_list_email',crontab_id=7)
+                    '''
+
+                    utc_email_time = convert_to_utc(minyan.timezone, mailing_send_time)
+
+                    print('UTC Email time is', utc_email_time)
 
 
+                    # Pull out hour and minute for crontab
+                    ct_hour = utc_email_time.hour
+                    ct_minute = utc_email_time.minute
 
-                utc_email_time = convert_to_utc(davening.minyan.timezone, davening_email_time)
+                    # flatten list seperated by comma
+                    ct_days = ','.join(davening_days)
 
-                print('UTC Email time is', utc_email_time)
+                    # We have to increment each day if utc time happens to be in the following day
+                    # had to mod 7 for the case of user input of day 6 (saturday) then incremented by one (7) should map to day 0
+                    if day_checker(utc_email_time, davening.davening_time):
+                        incremented_days = [str((int(x) + 1) % 7) for x in davening_days]
+                        ct_days = ','.join(incremented_days)
 
-                # Pull out hour and minute for crontab
-                ct_hour = utc_email_time.hour
-                ct_minute = utc_email_time.minute
+                    crontab_dic = {'hour': ct_hour, 'minute': ct_minute, 'day_of_week': ct_days}
 
-                # flatten list seperated by comma
-                ct_days = ','.join(davening_days)
+                    # If crontab exists set the pre-existing crontab id to the current crontab request
+                    ct_id = crontab_exists(crontab_dic)
 
-                # We have to increment each day if utc time happens to be in the following day
-                # had to mod 7 for the case of user input of day 6 (saturday) then incremented by one (7) should map to day 0
-                if day_checker(utc_email_time, davening.davening_time):
-                    incremented_days = [str((int(x) + 1) % 7) for x in davening_days]
-                    ct_days = ','.join(incremented_days)
+                    # If crontab does not exist create a new one
+                    if not ct_id:
+                        print('Creating new crontab')
+                        crontab = CrontabSchedule.objects.create(minute=ct_minute, hour=ct_hour, day_of_week=ct_days)
+                        ct_id = crontab.id
 
-                crontab_dic = {'hour': ct_hour, 'minute': ct_minute, 'day_of_week': ct_days}
-                # If crontab exists set the pre-existing crontab id to the current crontab request
-                # else create new crontab and
-                ct_id = crontab_exists(crontab_dic)
+                    print('crontab id: ', ct_id)
+                    # create the periodic task with the above crontab id
 
-                if not ct_id:
-                    print('Creating new crontab')
-                    crontab = CrontabSchedule.objects.create(minute=ct_minute, hour=ct_hour, day_of_week=ct_days)
-                    ct_id = crontab.id
+                    # Set the name of the task
+                    task_name = davening_title + ' Periodic Email'
+                    pt = PeriodicTask.objects.create(name=task_name, task='minyan_mailer.tasks.send_test_list_email',
+                                                     crontab_id=ct_id, enabled=mailing_enabled)
 
-                print('crontab id: ', ct_id)
-                # create the periodic task with the above crontab id
+                    # Now we create the PeriodicMailing object
+                    pm = PeriodicMailing.objects.create(email_text=email_text,enabled=mailing_enabled,mailgun_list_name='Test_MailGun_List', crontab_schedule_id=ct_id,periodic_task_id=pt.id, email_send_time=utc_email_time)
+                    print(pt)
 
-                # Set the name of the task
-                task_name = davening_title + ' Periodic Email'
-                pt = PeriodicTask.objects.create(name=task_name, task='minyan_mailer.tasks.send_test_list_email',
-                                                 crontab_id=ct_id)
-
-                print(pt)
-                '''
 
                 return HttpResponseRedirect(reverse('minyan_mailer:davening_profile', args=(davening.id,)))
 
