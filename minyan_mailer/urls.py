@@ -20,4 +20,6 @@ urlpatterns = [
     ###  Only minyan gabbai access
     url(r'^minyan/davening/create/(?P<minyan_id>[0-9]+)/$', views.davening_create, name='davening_create'),
     url(r'^minyan/davening/profile/(?P<davening_id>[0-9]+)/$', views.davening_profile, name='davening_profile'),
+    url(r'^minyan/davening/edit_mailing/(?P<periodic_mailing_id>[0-9]+)/$', views.periodic_mailing_edit, name='periodic_mailing_edit'),
+
 ]

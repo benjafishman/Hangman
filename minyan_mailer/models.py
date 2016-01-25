@@ -114,6 +114,7 @@ class PeriodicMailing(models.Model):
     # periodic_task = models.ForeignKey(PeriodicTask)
     periodic_task_id = models.CharField(max_length=200)
     email_send_time = models.TimeField(blank=True, null=True)
+    davening_key = models.ForeignKey(Davening)
 
     def __str__(self):
         return u'%s' % self.mailgun_list_name

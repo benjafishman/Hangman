@@ -8,7 +8,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 
 from minyan_mailer.models import Minyan, Davening, Member, Davening_Group, PeriodicMailing
-from minyan_mailer.forms import MinyanForm, UserForm, User, DaveningForm, UnauthenticatedDaveningSignUpForm, PeriodicMailingForm
+from minyan_mailer.forms import MinyanForm, UserForm, User, DaveningForm, UnauthenticatedDaveningSignUpForm, \
+    PeriodicMailingForm
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -114,7 +115,7 @@ def davening_create(request, minyan_id):
         else:
             form = DaveningForm(request.POST)
             periodic_mailing_form = PeriodicMailingForm(request.POST)
-            #periodic_mailing_form = PeriodicMailingForm(request.POST)
+            # periodic_mailing_form = PeriodicMailingForm(request.POST)
             # If data is valid, proceeds to create a new post and redirect the user
             if form.is_valid():
                 davening_title = form.cleaned_data['title']
@@ -208,19 +209,21 @@ def davening_create(request, minyan_id):
                     # create the periodic task with the above crontab id
 
                     # Set the name of the task
-                    task_name = davening_title + ' Periodic Email'
+                    task_name = davening_title + '_periodic_email'
                     pt = PeriodicTask.objects.create(name=task_name, task='minyan_mailer.tasks.send_test_list_email',
                                                      crontab_id=ct_id, enabled=mailing_enabled)
 
                     # Now we create the PeriodicMailing object
-                    pm = PeriodicMailing.objects.create(email_text=email_text,enabled=mailing_enabled,mailgun_list_name='Test_MailGun_List', crontab_schedule_id=ct_id,periodic_task_id=pt.id, email_send_time=utc_email_time)
+                    pm = PeriodicMailing.objects.create(email_text=email_text, enabled=mailing_enabled,
+                                                        mailgun_list_name='Test_MailGun_List',
+                                                        crontab_schedule_id=ct_id, periodic_task_id=pt.id,
+                                                        email_send_time=utc_email_time, davening_key=davening)
                     print(pt)
-
 
                 return HttpResponseRedirect(reverse('minyan_mailer:davening_profile', args=(davening.id,)))
 
         return render(request, 'minyan_mailer/davening_create.html', {
-            'form': form, 'periodic_mailing_form':periodic_mailing_form,
+            'form': form, 'periodic_mailing_form': periodic_mailing_form,
         })
     else:
         return HttpResponseForbidden()
@@ -241,7 +244,7 @@ def davening_profile(request, davening_id):
         member = Member.objects.get(user=request.user)
         is_gabbai = member.is_gabbai(davening.minyan)
 
-    #print(davening.days)
+    # print(davening.days)
 
     if request.method == 'GET':
         unauthenticated_user_form = UnauthenticatedDaveningSignUpForm()
@@ -267,6 +270,7 @@ def davening_profile(request, davening_id):
 
 
 @login_required
+# TODO:FINISH THIS VIEW
 def periodic_mailing_create(request, davening_id):
     davening = Davening.objects.get(pk=davening_id)
     member = Member.objects.get(user=request.user)
@@ -279,11 +283,99 @@ def periodic_mailing_create(request, davening_id):
 
     return False
 
+@login_required
+def periodic_mailing_edit(request, periodic_mailing_id):
+    print('mailing edit')
+    mailing = PeriodicMailing.objects.get(pk=periodic_mailing_id)
+    # TODO: should checking if the user is gabbai process be function?
+    member = Member.objects.get(user=request.user)
+
+    davening = mailing.davening_key
+    days = CrontabSchedule.objects.get(pk=mailing.crontab_schedule_id).day_of_week
+    print(type(days))
+    print(days.split(","))
+    is_gabbai = False
+    if request.user.is_authenticated():
+        member = Member.objects.get(user=request.user)
+        is_gabbai = member.is_gabbai(davening.minyan)
+
+    if is_gabbai:
+        if request.method == 'GET':
+            print(days)
+
+            local_time = convert_to_local_time(davening.minyan.timezone,mailing.email_send_time)
+            print(local_time.time())
+            print(type(local_time.time()))
+            #form.fields["email_send_time"].initial = local_time.time()
+            #print(form.fields["email_send_time"].initial) # = local_time.time()
+            form = PeriodicMailingForm(send_time=local_time.time(), instance=mailing)
+            form.fields["send_days"].initial = days
+        else:
+            form = PeriodicMailingForm(request.POST, instance=mailing)
+            if form.is_valid():  #is_valid is function not property
+                if form.has_changed():
+                    print('form changed')
+                    print("The following fields changed: %s" % ", ".join(form.changed_data))
+                    for d in form.changed_data:
+                        print(form.cleaned_data[d])
+                        if d == 'email_send_time' or (d == 'send_days' and days.split(",") != form.cleaned_data['send_days']):
+                            print('do time magic')
+                            minyan = davening.minyan
+                            utc_email_time = convert_to_utc(minyan.timezone, form.cleaned_data['email_send_time'])
+
+                            print('UTC Email time is', utc_email_time)
+
+                            # Pull out hour and minute for crontab
+                            ct_hour = utc_email_time.hour
+                            ct_minute = utc_email_time.minute
+
+                            # flatten list seperated by comma
+                            ct_days = ','.join(form.cleaned_data['send_days'])
+
+                            # We have to increment each day if utc time happens to be in the following day
+                            # had to mod 7 for the case of user input of day 6 (saturday) then incremented by one (7) should map to day 0
+                            if day_checker(utc_email_time, davening.davening_time):
+                                incremented_days = [str((int(x) + 1) % 7) for x in form.cleaned_data['send_days']]
+                                ct_days = ','.join(incremented_days)
+
+                            crontab_dic = {'hour': ct_hour, 'minute': ct_minute, 'day_of_week': ct_days}
+
+                            # If crontab exists set the pre-existing crontab id to the current crontab request
+                            ct_id = crontab_exists(crontab_dic)
+
+                            # If crontab does not exist create a new one
+                            if not ct_id:
+                                print('Creating new crontab')
+                                crontab = CrontabSchedule.objects.create(minute=ct_minute, hour=ct_hour, day_of_week=ct_days)
+                                ct_id = crontab.id
+
+                            print('New crontab id', ct_id)
+                            # since we created a new crontab
+                            # we have to assign the cron tab id to the associated periodictask
+                            pt = PeriodicTask.objects.get(pk=mailing.periodic_task_id)
+                            print(pt)
+                            pt.crontab_id = ct_id
+                            pt.enabled = form.cleaned_data['enabled']
+                            print(pt)
+                            pt.save()
+                            mailing.crontab_schedule_id = ct_id
+                        else:
+                            print("NOOO time magic")
+
+                        mailing.d = form.cleaned_data[d]
+                        mailing.save()
+                        print('saved updates')
+
+        return render(request, 'minyan_mailer/edit_mailing.html', {'mailing': mailing,
+                                                                   'form': form})
+    else:
+        return HttpResponseForbidden()
+
 
 def convert_to_utc(timezone, time):
-    #TODO: timemzone/time validation
+    # TODO: timemzone/time validation
     '''
-    Helper function to convert a given time to its corresponding UTC time
+    :Helper function to convert a given time to its corresponding UTC time
     :param timezone: timezone variable
     :param time: time to convert to utc
     :return:
@@ -304,6 +396,16 @@ def convert_to_utc(timezone, time):
     # conversion
     utc_dt = local_time.astimezone(pytz.utc)
     return utc_dt
+
+def convert_to_local_time(timezone, time):
+    print(timezone)
+    d = date.today()
+    # We need an entire date object so well combine the time with the current date
+    # this might backfire
+    convert = datetime.combine(d, time)
+    local_tz = pytz.timezone(timezone)
+    return convert.replace(tzinfo=pytz.utc).astimezone(local_tz)
+    #print(pytz.utc.localize(time, is_dst=None).astimezone(timezone))
 
 
 def day_checker(utc_time, local_time):
