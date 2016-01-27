@@ -57,7 +57,8 @@ class Davening(models.Model):
 
     minyan = models.ForeignKey(Minyan, on_delete=models.CASCADE)
 
-    davening_time = models.TimeField(blank=True)
+    local_davening_time = models.TimeField(blank=True)
+
 
     # davening_groups = models.ManyToManyField(Davening_Group, null=True, blank=True)
 
@@ -113,7 +114,8 @@ class PeriodicMailing(models.Model):
     ##### How can update these on the fly
     # periodic_task = models.ForeignKey(PeriodicTask)
     periodic_task_id = models.CharField(max_length=200)
-    email_send_time = models.TimeField(blank=True, null=True)
+    email_utc_send_time = models.TimeField(blank=True, null=True)
+    email_local_send_time = models.TimeField(blank=True, null=True)
     davening_key = models.ForeignKey(Davening)
 
     def __str__(self):

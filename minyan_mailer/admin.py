@@ -15,13 +15,13 @@ class Davening_GroupInline(admin.TabularInline):
     extra = 3
 
 class DaveningAdmin(admin.ModelAdmin):
-    list_display = [ 'minyan', 'title', 'days', 'davening_time', 'primary_davening_group', 'periodic_mailing' ]
+    list_display = [ 'minyan', 'title', 'days', 'local_davening_time', 'primary_davening_group', 'periodic_mailing' ]
 
 class Davening_GroupAdmin(admin.ModelAdmin):
     list_display = ['minyan', 'title', 'mailing_list_title']
 
 class PeriodicMailingAdmin(admin.ModelAdmin):
-    list_display = ['email_text', 'enabled', 'mailgun_list_name', 'crontab_schedule_id', 'periodic_task_id', 'email_send_time']
+    list_display = ['email_text', 'enabled', 'mailgun_list_name', 'crontab_schedule_id', 'periodic_task_id', 'email_utc_send_time', 'email_local_send_time']
 admin.site.register(PeriodicMailing, PeriodicMailingAdmin)
 
 admin.site.register(kombu_models.Message)

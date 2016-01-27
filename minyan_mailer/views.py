@@ -20,7 +20,6 @@ from minyan_mailer.tasks import add
 import pytz
 from datetime import datetime, date
 
-
 # celery imports
 from djcelery.models import CrontabSchedule, PeriodicTask
 
@@ -119,7 +118,7 @@ def davening_create(request, minyan_id):
             # If data is valid, proceeds to create a new post and redirect the user
             if form.is_valid():
                 davening_title = form.cleaned_data['title']
-                davening_time = form.cleaned_data['davening_time']
+                davening_time = form.cleaned_data['local_davening_time']
                 davening_days = form.cleaned_data['days']
 
                 # Create the davening group real quick
@@ -131,7 +130,7 @@ def davening_create(request, minyan_id):
                 #TODO: add below back at some point
                 davening = Davening.objects.create(title=davening_title,
                                                    minyan=minyan,
-                                                   davening_time=davening_time,
+                                                   local_davening_time=davening_time,
                                                    days=davening_days,
                                                    primary_davening_group=davening_group,
                 )
@@ -155,7 +154,7 @@ def davening_create(request, minyan_id):
                     send_days = periodic_mailing_form.cleaned_data['send_days']
                     print(send_days)
 
-                    mailing_send_time = periodic_mailing_form.cleaned_data['email_send_time']
+                    mailing_send_time = periodic_mailing_form.cleaned_data['email_local_send_time']
                     print(mailing_send_time)
 
                     mailing_enabled = periodic_mailing_form.cleaned_data['enabled']
@@ -180,7 +179,6 @@ def davening_create(request, minyan_id):
 
                     print('UTC Email time is', utc_email_time)
 
-
                     # Pull out hour and minute for crontab
                     ct_hour = utc_email_time.hour
                     ct_minute = utc_email_time.minute
@@ -190,7 +188,7 @@ def davening_create(request, minyan_id):
 
                     # We have to increment each day if utc time happens to be in the following day
                     # had to mod 7 for the case of user input of day 6 (saturday) then incremented by one (7) should map to day 0
-                    if day_checker(utc_email_time, davening.davening_time):
+                    if day_checker(utc_email_time, davening.local_davening_time):
                         incremented_days = [str((int(x) + 1) % 7) for x in davening_days]
                         ct_days = ','.join(incremented_days)
 
@@ -216,8 +214,8 @@ def davening_create(request, minyan_id):
                     # Now we create the PeriodicMailing object
                     pm = PeriodicMailing.objects.create(email_text=email_text, enabled=mailing_enabled,
                                                         mailgun_list_name='Test_MailGun_List',
-                                                        crontab_schedule_id=ct_id, periodic_task_id=pt.id,
-                                                        email_send_time=utc_email_time, davening_key=davening)
+                                                        crontab_schedule_id=ct_id, periodic_task_id=pt.id, email_local_send_time=mailing_send_time,
+                                                        email_utc_send_time=utc_email_time, davening_key=davening)
                     print(pt)
 
                 return HttpResponseRedirect(reverse('minyan_mailer:davening_profile', args=(davening.id,)))
@@ -238,7 +236,7 @@ def davening_profile(request, davening_id):
 
     is_gabbai = False
 
-    utc_time = convert_to_utc(davening.minyan.timezone, davening.davening_time)
+    utc_time = convert_to_utc(davening.minyan.timezone, davening.local_davening_time)
 
     if request.user.is_authenticated():
         member = Member.objects.get(user=request.user)
@@ -304,19 +302,21 @@ def periodic_mailing_edit(request, periodic_mailing_id):
             print(days)
 
             local_time = convert_to_local_time(davening.minyan.timezone,mailing.email_send_time)
+            print(local_time)
             print(local_time.time())
-            print(type(local_time.time()))
-            #form.fields["email_send_time"].initial = local_time.time()
-            #print(form.fields["email_send_time"].initial) # = local_time.time()
-            form = PeriodicMailingForm(send_time=local_time.time(), instance=mailing)
+            #form = PeriodicMailingForm(initial={'send_days':days, 'enabled':mailing.enabled, 'email_text':mailing.email_text,'email_send_time':local_time.time()})
+
+            form = PeriodicMailingForm(instance=mailing)
             form.fields["send_days"].initial = days
+            #
         else:
-            form = PeriodicMailingForm(request.POST, instance=mailing)
+            form = PeriodicMailingForm(request.POST)
             if form.is_valid():  #is_valid is function not property
                 if form.has_changed():
                     print('form changed')
                     print("The following fields changed: %s" % ", ".join(form.changed_data))
                     for d in form.changed_data:
+                        print(d)
                         print(form.cleaned_data[d])
                         if d == 'email_send_time' or (d == 'send_days' and days.split(",") != form.cleaned_data['send_days']):
                             print('do time magic')
@@ -349,7 +349,7 @@ def periodic_mailing_edit(request, periodic_mailing_id):
                                 crontab = CrontabSchedule.objects.create(minute=ct_minute, hour=ct_hour, day_of_week=ct_days)
                                 ct_id = crontab.id
 
-                            print('New crontab id', ct_id)
+                            print('Crontab id', ct_id)
                             # since we created a new crontab
                             # we have to assign the cron tab id to the associated periodictask
                             pt = PeriodicTask.objects.get(pk=mailing.periodic_task_id)
@@ -362,6 +362,8 @@ def periodic_mailing_edit(request, periodic_mailing_id):
                         else:
                             print("NOOO time magic")
 
+                        print("here")
+                        print(d,form.cleaned_data[d] )
                         mailing.d = form.cleaned_data[d]
                         mailing.save()
                         print('saved updates')
@@ -398,12 +400,16 @@ def convert_to_utc(timezone, time):
     return utc_dt
 
 def convert_to_local_time(timezone, time):
+    print('utc time: ', time)
     print(timezone)
     d = date.today()
     # We need an entire date object so well combine the time with the current date
     # this might backfire
     convert = datetime.combine(d, time)
+    print(convert)
     local_tz = pytz.timezone(timezone)
+    print(local_tz)
+    print(pytz.utc.localize(convert, is_dst=None).astimezone(local_tz))
     return convert.replace(tzinfo=pytz.utc).astimezone(local_tz)
     #print(pytz.utc.localize(time, is_dst=None).astimezone(timezone))
 

@@ -1,0 +1,9 @@
+{% extends 'minyan_mailer/base.html' %}
+{% load tz %}
+{% load minyan_mailer_filters %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Update" />
+</form>
