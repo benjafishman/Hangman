@@ -299,29 +299,21 @@ def periodic_mailing_edit(request, periodic_mailing_id):
 
     if is_gabbai:
         if request.method == 'GET':
-            print(days)
-
-            local_time = convert_to_local_time(davening.minyan.timezone,mailing.email_send_time)
-            print(local_time)
-            print(local_time.time())
-            #form = PeriodicMailingForm(initial={'send_days':days, 'enabled':mailing.enabled, 'email_text':mailing.email_text,'email_send_time':local_time.time()})
-
             form = PeriodicMailingForm(instance=mailing)
             form.fields["send_days"].initial = days
-            #
         else:
-            form = PeriodicMailingForm(request.POST)
+            form = PeriodicMailingForm(request.POST, instance=mailing)
             if form.is_valid():  #is_valid is function not property
                 if form.has_changed():
                     print('form changed')
                     print("The following fields changed: %s" % ", ".join(form.changed_data))
                     for d in form.changed_data:
                         print(d)
-                        print(form.cleaned_data[d])
-                        if d == 'email_send_time' or (d == 'send_days' and days.split(",") != form.cleaned_data['send_days']):
+                        if d == 'email_local_send_time' or (d is 'send_days' and days.split(",") != form.cleaned_data['send_days']):
                             print('do time magic')
                             minyan = davening.minyan
-                            utc_email_time = convert_to_utc(minyan.timezone, form.cleaned_data['email_send_time'])
+
+                            utc_email_time = convert_to_utc(minyan.timezone, form.cleaned_data['email_local_send_time'])
 
                             print('UTC Email time is', utc_email_time)
 
@@ -334,7 +326,7 @@ def periodic_mailing_edit(request, periodic_mailing_id):
 
                             # We have to increment each day if utc time happens to be in the following day
                             # had to mod 7 for the case of user input of day 6 (saturday) then incremented by one (7) should map to day 0
-                            if day_checker(utc_email_time, davening.davening_time):
+                            if day_checker(utc_email_time, form.cleaned_data['email_local_send_time']):
                                 incremented_days = [str((int(x) + 1) % 7) for x in form.cleaned_data['send_days']]
                                 ct_days = ','.join(incremented_days)
 
@@ -359,12 +351,17 @@ def periodic_mailing_edit(request, periodic_mailing_id):
                             print(pt)
                             pt.save()
                             mailing.crontab_schedule_id = ct_id
+                            mailing.d = form.cleaned_data[d]
+                            if d is 'email_local_send_time':
+                                mailing.email_utc_send_time = utc_email_time
+                        elif d == 'enabled':
+                            # set the periodic task enabled value to the value chosen by the user
+                            pt = PeriodicTask.objects.get(pk=mailing.periodic_task_id)
+                            pt.enabled = form.cleaned_data[d]
+                            pt.save()
                         else:
-                            print("NOOO time magic")
+                            mailing.d = form.cleaned_data[d]
 
-                        print("here")
-                        print(d,form.cleaned_data[d] )
-                        mailing.d = form.cleaned_data[d]
                         mailing.save()
                         print('saved updates')
 
