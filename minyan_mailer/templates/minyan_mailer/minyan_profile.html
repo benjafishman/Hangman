@@ -19,7 +19,9 @@
             <th>Davening</th>
             <th>Weekday(s)</th>
             <th>Time</th>
-            <!--<th>Sign Up</th>-->
+            {% if is_gabbai %}
+                <th>Mailing</th>
+            {% endif %}
         </tr>
         </thead>
         <tbody>
@@ -27,21 +29,18 @@
             {% for d in davenings %}
                 <tr>
                     <td>
-
                         <a href="{% url 'minyan_mailer:davening_profile' d.id %}">{{ d.title }}</a>
                     </td>
                     <td>{{ d.days }}</td>
                     <td>{{ d.davening_time|time }}</td>
-
-                    <!--<td>
-                        <form action="#" method="post">
-                            {% csrf_token %}
-
-                                {{ sign_up_form.as_p }}
-                            <input type="hidden" name="davening_id" value="{{ d.id }}" />
-                            <input type="submit" value="Submit"/>
-                        </form>
-                    </td> -->
+                    {% if is_gabbai %}
+                        {% if d.periodic_mailing.id %}
+                            <td>
+                                <a href="{% url 'minyan_mailer:periodic_mailing_edit' d.periodic_mailing.id %}">Edit
+                                    Mailing</a>
+                            </td>
+                        {% endif %}
+                    {% endif %}
                 </tr>
             {% endfor %}
         {% else %}

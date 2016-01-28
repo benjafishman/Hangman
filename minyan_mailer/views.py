@@ -218,6 +218,11 @@ def davening_create(request, minyan_id):
                                                         email_utc_send_time=utc_email_time, davening_key=davening)
                     print(pt)
 
+                    # adding the periodic mailing to davening instance
+                    davening.periodic_mailing = pm
+
+                    davening.save()
+
                 return HttpResponseRedirect(reverse('minyan_mailer:davening_profile', args=(davening.id,)))
 
         return render(request, 'minyan_mailer/davening_create.html', {
