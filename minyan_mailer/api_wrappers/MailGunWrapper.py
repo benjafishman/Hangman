@@ -13,6 +13,9 @@ class MailGunWrapper():
     from_address = settings.MAILGUN_FROM_ADDRESS
 
     def send_simple_message(self, to_address, subject, message):
+        print(to_address)
+        #print(subject)
+        #print(message)
         api_end_point = "/messages"
         url = urljoin(self.base_url, self.domain)
         url = url + api_end_point
