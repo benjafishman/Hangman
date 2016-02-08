@@ -1,14 +1,14 @@
-{% extends 'minyan_mailer/base.html' %}
+{% extends 'minyan_mailer/base-v2.html' %}
 {% block page-title %}Home{% endblock %}
 {% block content %}
     <form action="#" method="post">
         {% csrf_token %}
         <label for="search">Find a Minyan</label>
         <input type="text" name="search" id="search" value=""><br>
-        <input type="submit" value="Submit"/>
+        <input type="submit" value="Search"/>
     </form>
     <div>
         <h3>Register Your Own Minyan</h3>
-        <a href="{% url 'minyan_mailer:minyan_create' %}">Register</a>
+        <a href="{% url 'home.views.login' %}">Login</a>
     </div>
 {% endblock content %}

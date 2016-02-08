@@ -1,6 +1,7 @@
-{% extends 'minyan_mailer/base.html' %}
+{% extends 'minyan_mailer/base-v2.html' %}
 {% block page-title %}Account{% endblock %}
 {% block content %}
+    <div class="container">
     <h1>Hello {{ user.username }}</h1>
     <h2>Your Current Minyans:</h2>
     <table class="table table-striped table-bordered">
@@ -33,5 +34,6 @@
         {% endif %}
         </tbody>
     </table>
-    <a href="{% url 'minyan_mailer:minyan_create' %}">Register</a>
+    <a href="{% url 'minyan_mailer:minyan_create' %}">Register A New Minyan</a>
+    </div>
 {% endblock content %}

@@ -138,6 +138,8 @@ STATIC_ROOT = 'staticfiles'
 STATICFILES_DIRS = (
     (os.path.join(BASE_DIR, '../home/static')),
     (os.path.join(BASE_DIR, '../hangman/static')),
+    (os.path.join(BASE_DIR, '../blog/static')),
+    (os.path.join(BASE_DIR, '../minyan_mailer/static')),
 )
 
 LOGIN_REDIRECT_URL = '/minyan_mailer/user/profile'

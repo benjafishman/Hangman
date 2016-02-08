@@ -9,18 +9,12 @@
 {% block content %}
     <div id="login-wrapper">
         <h3>Login</h3>
-
-
-
-
         <form method="post" action="">
             {% csrf_token %}
             {{ form.as_p }}
-
             <input type="submit" value="login"/>
             <input type="hidden" name="next" value="{{ next }}"/>
         </form>
-
         <p id="register">New User: <a href="/accounts/register">Register Here</a></p>
     </div>
 
