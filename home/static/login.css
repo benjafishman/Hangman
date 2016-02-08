@@ -1,0 +1,51 @@
+#login-wrapper {
+    background-color: #232323;
+    width: 75%;
+    /* Set the margin-left and margin-right automatically set */
+    margin: 0 auto;
+    height: 300px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+
+}
+
+input[type="text"] {
+    width: 100%;
+    height: 40px;
+}
+
+input[type="password"] {
+    width: 100%;
+    height: 40px;
+}
+
+table {
+    width: 100%;
+}
+
+p {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+h3 {
+    margin: 0;
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+form label {
+    display: none;
+}
+
+form > .errorlist {
+    list-style: none;
+    margin: 0;
+}
+form > .nonfield {
+    display: none;
+}
+#register {
+    text-align: center;
+}

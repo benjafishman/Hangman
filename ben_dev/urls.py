@@ -21,7 +21,8 @@ urlpatterns = [
     url(r'^$', 'home.views.index'),
 
     # Login paths
-    url(r'^accounts/login/$', login),
+    #url(r'^accounts/login/$', login),
+    url(r'^accounts/login/$', 'home.views.login'),
     url(r'^accounts/logout/$', logout),
     url(r'^accounts/register/$', 'home.views.register'),
 
@@ -32,6 +33,7 @@ urlpatterns = [
 
 
     # Login / logout
-    url(r'^login/$', 'django.contrib.auth.views.login'),
+    #url(r'^login/$', 'django.contrib.auth.views.login'),
+    url(r'^login/$', 'home.views.login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout'),
 ]

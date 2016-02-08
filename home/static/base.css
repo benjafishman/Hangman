@@ -1,8 +1,17 @@
 body {
-    background-color: #000000;
+    background-color: #4285F4;
     color: limegreen;
 }
 
 body {
     margin: 0 auto;
+}
+
+#login-content-wrapper {
+    background-color: #232323;
+    margin: 10% auto;
+    width: 350px;
+    height: 310px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.1);
+    box-sizing: border-box;
 }
