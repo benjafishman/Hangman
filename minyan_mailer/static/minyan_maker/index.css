@@ -1,0 +1,13 @@
+form {
+    margin-top: 120px;
+}
+
+.wrapper {
+    text-align: center;
+}
+
+input[type="text"] { border: 1px solid #337ab7 }
+
+#button-wrapper {
+    padding-top: 10px;
+}
