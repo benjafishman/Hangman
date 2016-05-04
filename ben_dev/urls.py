@@ -19,6 +19,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^$', 'home.views.index'),
     url(r'^hangman/', include('hangman.urls', namespace="hangman")),
+    url(r'^plaid/', include('plaid_tester.urls', namespace="plaid_tester")),
     url(r'^admin/', include(admin.site.urls)),
 
 ]

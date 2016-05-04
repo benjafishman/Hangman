@@ -1,8 +1,5 @@
 body {
-    background-color: #000000;
-    color: limegreen;
-}
-
-body {
+    background-color: white;
     margin: 0 auto;
+    max-width: 1000px;
 }

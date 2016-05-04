@@ -1,0 +1,12 @@
+#plaid-link {
+    position: absolute;
+    left: 45%;
+    right: 50%;
+    margin-left:-10px; /* -1/2 width */
+    margin-top:20%; /* -1/2 height */
+}
+
+#plaid-link-button {
+    width: 209px;
+    height: 40px;
+}

@@ -1,0 +1,28 @@
+{% extends 'plaid_tester/base.html' %}
+
+{% load staticfiles %}
+
+{% block header %}
+    <link href="{% static 'index2.css' %}" rel="stylesheet">
+{% endblock header %}
+
+{% block content %}
+    <!-- A hidden input named public_token will be appended to this form
+ once the user has completed the Link flow. Link will then submit the
+ form, sending the public_token to your server. -->
+    <form id="plaid-link" method="POST" action="{% url 'plaid_tester:data_dump' %}">
+    {% csrf_token %}
+    </form>
+
+    <!-- To use Link with longtail institutions on Connect, set the
+    data-longtail attribute to 'true'. See the Parameter Reference for
+    additional documentation. -->
+    <script
+            src="https://cdn.plaid.com/link/stable/link-initialize.js"
+            data-client-name="Client Name"
+            data-form-id="plaid-link"
+            data-key="test_key"
+            data-product="auth"
+            data-env="tartan">
+    </script>
+{% endblock content %}

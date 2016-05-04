@@ -1,0 +1,21 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    {% block header %}
+    {% endblock header %}
+    <link href="{% static 'basic.css' %}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Plaid Testing</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+</head>
+<body>
+{% block content %}
+{% endblock content %}
+
+{% block script %}
+{% endblock %}
+</body>
+</html>

@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'home',
     'hangman',
+    'plaid_tester',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -124,5 +125,11 @@ STATIC_ROOT = 'staticfiles'
 STATICFILES_DIRS = (
     (os.path.join(BASE_DIR, '../home/static')),
     (os.path.join(BASE_DIR, '../hangman/static')),
+    (os.path.join(BASE_DIR, '../plaid_tester/static')),
 )
 
+
+#Plaid Credentials
+
+PLAID_CLIENT_ID=os.environ.get("PLAID_CLIENT_ID")
+PLAID_SECRET=os.environ.get("PLAID_SECRET")
